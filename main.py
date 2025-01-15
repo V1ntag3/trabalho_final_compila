@@ -6,9 +6,6 @@ from lpms.LPMSErrorListener import LPMSErrorListener
 from lpms.LPMSBaseListener import SemanticAnalyzer
 
 def print_ast(tree, parser, indent=0):
-    """
-    Retorna a representação da AST organizada com indentação.
-    """
     def recursive_print(node, level):
         if node.getChildCount() == 0:
             return "  " * level + node.getText()
@@ -48,8 +45,6 @@ def main():
             print("\n".join(analyzer.get_errors()))
         else:
             print(print_ast(tree, parser))
-        
-
 
 if __name__ == '__main__':
     main()

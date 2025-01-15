@@ -1,8 +1,11 @@
 Program Maior_Menor {
     float a, b;
+
     input(a, b);
-    bool b = False;
+
+    a = 5.0 + 4;
     if (a > b){
+        
         print("Maior: ", a);
     }
     else{
@@ -11,7 +14,8 @@ Program Maior_Menor {
             print("Maior: ", b);
         }
         else{
-            print("Iguais!");
+            print(b,"teste");
         }
+
     }
 }

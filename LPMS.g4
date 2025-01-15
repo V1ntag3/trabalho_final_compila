@@ -14,11 +14,11 @@ statement : assignmentStatement
           | input;
 
 declarations : (TYPE ID (VIRGULA ID)* FIM_DE_LINHA)
-             | (TYPE ID ATRIBUICAO_OPERADOR (expression | logic_expr) FIM_DE_LINHA);
+             | ((TYPE | TYPE_CONST) ID ATRIBUICAO_OPERADOR (expression | logic_expr) FIM_DE_LINHA);
 
 assignmentStatement : ID (ATRIBUICAO_OPERADOR (expression | logic_expr) ) FIM_DE_LINHA;
 
-ifStatement : IF_CONDICIONAL E_PARAN logic_expr D_PARAN block (ELSE_CONDICIONAL block)?;
+ifStatement : IF_CONDICIONAL E_PARAN (logic_expr) D_PARAN block (ELSE_CONDICIONAL block)?;
 
 whileStatement : WHILE_CONDICIONAL E_PARAN logic_expr D_PARAN block ;
 
@@ -61,8 +61,9 @@ VIRGULA:',';
 TYPE : 'int'
      | 'float'
      | 'str'
-     | 'const'
      | 'bool';
+
+TYPE_CONST: 'const';
 
 BOOLEAN: 'False' | 'True';
 
