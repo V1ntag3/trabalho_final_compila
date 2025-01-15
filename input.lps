@@ -1,8 +1,8 @@
 Program Maior_Menor {
     float a, b;
+    const c = 2;
 
     input(a, b);
-
     a = 5.0 + 4;
     if (a > b){
         
