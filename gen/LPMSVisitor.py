@@ -19,16 +19,6 @@ class LPMSVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LPMSParser#declarations.
-    def visitDeclarations(self, ctx:LPMSParser.DeclarationsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by LPMSParser#variableDeclaration.
-    def visitVariableDeclaration(self, ctx:LPMSParser.VariableDeclarationContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by LPMSParser#block.
     def visitBlock(self, ctx:LPMSParser.BlockContext):
         return self.visitChildren(ctx)
@@ -36,6 +26,11 @@ class LPMSVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LPMSParser#statement.
     def visitStatement(self, ctx:LPMSParser.StatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPMSParser#declarations.
+    def visitDeclarations(self, ctx:LPMSParser.DeclarationsContext):
         return self.visitChildren(ctx)
 
 
@@ -54,11 +49,6 @@ class LPMSVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LPMSParser#expressionStatement.
-    def visitExpressionStatement(self, ctx:LPMSParser.ExpressionStatementContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by LPMSParser#expression.
     def visitExpression(self, ctx:LPMSParser.ExpressionContext):
         return self.visitChildren(ctx)
@@ -66,11 +56,6 @@ class LPMSVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LPMSParser#logic_expr.
     def visitLogic_expr(self, ctx:LPMSParser.Logic_exprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by LPMSParser#values_permitidos.
-    def visitValues_permitidos(self, ctx:LPMSParser.Values_permitidosContext):
         return self.visitChildren(ctx)
 
 

@@ -2,18 +2,19 @@ grammar LPMS;
 
 program : programSection EOF;
 
-programSection : PROGRAM_INIT ID E_CHAVES (declarations | statement)+ D_CHAVES;
-
-declarations : (TYPE ID (VIRGULA ID)* FIM_DE_LINHA) | (TYPE ID ATRIBUICAO_OPERADOR FIM_DE_LINHA) ;
+programSection : PROGRAM_INIT ID block;
 
 block : E_CHAVES  statement* D_CHAVES ;
 
 statement : assignmentStatement
+          | declarations
           | ifStatement
           | whileStatement
-          | expressionStatement
           | output
           | input;
+
+declarations : (TYPE ID (VIRGULA ID)* FIM_DE_LINHA)
+             | (TYPE ID ATRIBUICAO_OPERADOR (expression | logic_expr) FIM_DE_LINHA);
 
 assignmentStatement : ID (ATRIBUICAO_OPERADOR (expression | logic_expr) ) FIM_DE_LINHA;
 
@@ -21,24 +22,18 @@ ifStatement : IF_CONDICIONAL E_PARAN logic_expr D_PARAN block (ELSE_CONDICIONAL 
 
 whileStatement : WHILE_CONDICIONAL E_PARAN logic_expr D_PARAN block ;
 
-expressionStatement : expression FIM_DE_LINHA ;
-
 expression : E_PARAN expression D_PARAN
                  | MINUS_OPERADOR expression
                  | expression MODULO_OPERADOR expression
                  | expression MUL_DIV_OPERADOR expression
                  | expression (SOMA_OPERADOR | MINUS_OPERADOR) expression
-                 | values_permitidos;
+                 | (INT | FLOAT | ID);
 
 logic_expr : E_PARAN logic_expr D_PARAN
-                | values_permitidos (RELACIONAL_OPERADOR) values_permitidos
-                | values_permitidos2 (IGUALDADE_OPERADOR) values_permitidos2
+                | (INT | FLOAT | ID) (RELACIONAL_OPERADOR) (INT | FLOAT | ID)
+                | (INT | FLOAT | ID | BOOLEAN) (IGUALDADE_OPERADOR) (INT | FLOAT | ID | BOOLEAN)
                 | NEG_OPERADOR logic_expr
                 | BOOLEAN;
-
-values_permitidos: INT | FLOAT | ID;
-
-values_permitidos2: INT | FLOAT | ID | BOOLEAN;
 
 input : INPUT_FUNCTION E_PARAN varList D_PARAN FIM_DE_LINHA;
 

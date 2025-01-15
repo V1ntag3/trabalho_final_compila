@@ -26,24 +26,6 @@ class LPMSListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by LPMSParser#declarations.
-    def enterDeclarations(self, ctx:LPMSParser.DeclarationsContext):
-        pass
-
-    # Exit a parse tree produced by LPMSParser#declarations.
-    def exitDeclarations(self, ctx:LPMSParser.DeclarationsContext):
-        pass
-
-
-    # Enter a parse tree produced by LPMSParser#variableDeclaration.
-    def enterVariableDeclaration(self, ctx:LPMSParser.VariableDeclarationContext):
-        pass
-
-    # Exit a parse tree produced by LPMSParser#variableDeclaration.
-    def exitVariableDeclaration(self, ctx:LPMSParser.VariableDeclarationContext):
-        pass
-
-
     # Enter a parse tree produced by LPMSParser#block.
     def enterBlock(self, ctx:LPMSParser.BlockContext):
         pass
@@ -59,6 +41,15 @@ class LPMSListener(ParseTreeListener):
 
     # Exit a parse tree produced by LPMSParser#statement.
     def exitStatement(self, ctx:LPMSParser.StatementContext):
+        pass
+
+
+    # Enter a parse tree produced by LPMSParser#declarations.
+    def enterDeclarations(self, ctx:LPMSParser.DeclarationsContext):
+        pass
+
+    # Exit a parse tree produced by LPMSParser#declarations.
+    def exitDeclarations(self, ctx:LPMSParser.DeclarationsContext):
         pass
 
 
@@ -89,15 +80,6 @@ class LPMSListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by LPMSParser#expressionStatement.
-    def enterExpressionStatement(self, ctx:LPMSParser.ExpressionStatementContext):
-        pass
-
-    # Exit a parse tree produced by LPMSParser#expressionStatement.
-    def exitExpressionStatement(self, ctx:LPMSParser.ExpressionStatementContext):
-        pass
-
-
     # Enter a parse tree produced by LPMSParser#expression.
     def enterExpression(self, ctx:LPMSParser.ExpressionContext):
         pass
@@ -113,15 +95,6 @@ class LPMSListener(ParseTreeListener):
 
     # Exit a parse tree produced by LPMSParser#logic_expr.
     def exitLogic_expr(self, ctx:LPMSParser.Logic_exprContext):
-        pass
-
-
-    # Enter a parse tree produced by LPMSParser#values_permitidos.
-    def enterValues_permitidos(self, ctx:LPMSParser.Values_permitidosContext):
-        pass
-
-    # Exit a parse tree produced by LPMSParser#values_permitidos.
-    def exitValues_permitidos(self, ctx:LPMSParser.Values_permitidosContext):
         pass
 
 
