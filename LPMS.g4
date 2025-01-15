@@ -4,7 +4,8 @@ program : programSection EOF;
 
 programSection : PROGRAM_INIT ID block;
 
-block : E_CHAVES  statement* D_CHAVES ;
+block : E_CHAVES (statement | BREAK FIM_DE_LINHA)* D_CHAVES ;
+
 
 statement : assignmentStatement
           | declarations
@@ -54,6 +55,7 @@ PRINT_FUNCTION: 'print';
 IF_CONDICIONAL: 'if';
 ELSE_CONDICIONAL: 'else';
 WHILE_CONDICIONAL: 'while';
+BREAK: 'break';
 E_PARAN: '(';
 D_PARAN: ')';
 E_CHAVES: '{';

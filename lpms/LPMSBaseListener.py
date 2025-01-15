@@ -71,12 +71,9 @@ class SemanticAnalyzer(LPMSVisitor):
                         f"mas recebeu expressão do tipo '{actual_type}'."
                     )
 
-    def inferExpressionType(self, ctx):
-        if ctx.INT():
-            return "int"
-        elif ctx.FLOAT():
-            return "float"
-        elif (
+    def inferExpressionType(self, ctx:LPMSParser.ExpressionContext):
+        
+        if (
             ctx.MUL_DIV_OPERADOR()
             or ctx.SOMA_OPERADOR()
             or ctx.MINUS_OPERADOR()
@@ -107,8 +104,11 @@ class SemanticAnalyzer(LPMSVisitor):
         elif ctx.MINUS_OPERADOR():
             return self.inferExpressionType(ctx.expression())
         elif ctx.E_PARAN() and ctx.D_PARAN():
-            return self.inferExpressionType(ctx.expression())
-
+            return self.inferExpressionType(ctx.expression(0))
+        elif ctx.INT():
+            return "int"
+        elif ctx.FLOAT():
+            return "float"
         return None
 
     def inferLogicExpressionType(self, ctx: LPMSParser.Logic_exprContext):

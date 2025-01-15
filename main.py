@@ -21,7 +21,7 @@ def main():
     parser.add_argument("arquivo", type=str)
     args = parser.parse_args()
 
-    input_stream = FileStream(args.arquivo)
+    input_stream = FileStream(args.arquivo, encoding="utf-8")
         
     lexer = LPMSLexer(input_stream)
     fluxo_de_tokens = CommonTokenStream(lexer)
