@@ -35,14 +35,13 @@ def main():
     tree = parser.program()
 
     if error_listener.has_errors():
-        for error in error_listener.get_errors():
-            print(error)
+        print(error_listener.get_errors()[0])
     else:
         analyzer = SemanticAnalyzer()
         analyzer.visit(tree)
 
         if analyzer.has_errors():
-            print("\n".join(analyzer.get_errors()))
+            print(analyzer.get_errors()[0])
         else:
             print(print_ast(tree, parser))
 

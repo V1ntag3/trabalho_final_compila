@@ -10,65 +10,68 @@ else:
 
 def serializedATN():
     return [
-        4,1,29,174,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,29,182,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
         1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,2,1,2,5,2,38,8,2,10,2,12,2,41,9,2,
         1,2,1,2,1,3,1,3,1,3,1,3,1,3,1,3,3,3,51,8,3,1,4,1,4,1,4,1,4,5,4,57,
         8,4,10,4,12,4,60,9,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,68,8,4,1,4,1,4,
         3,4,72,8,4,1,5,1,5,1,5,1,5,3,5,78,8,5,1,5,1,5,1,6,1,6,1,6,1,6,1,
-        6,3,6,87,8,6,1,6,1,6,1,6,1,6,3,6,93,8,6,1,7,1,7,1,7,1,7,1,7,1,7,
-        1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,3,8,109,8,8,1,8,1,8,1,8,1,8,1,8,
-        1,8,1,8,1,8,1,8,5,8,120,8,8,10,8,12,8,123,9,8,1,9,1,9,1,9,1,9,1,
-        9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,3,9,138,8,9,1,10,1,10,1,10,1,10,
-        1,10,1,10,1,11,1,11,1,11,5,11,149,8,11,10,11,12,11,152,9,11,1,12,
-        1,12,1,12,1,12,1,12,1,12,1,13,1,13,3,13,162,8,13,1,13,1,13,1,13,
-        3,13,167,8,13,5,13,169,8,13,10,13,12,13,172,9,13,1,13,0,1,16,14,
-        0,2,4,6,8,10,12,14,16,18,20,22,24,26,0,4,1,0,13,14,1,0,16,18,2,0,
-        21,21,24,24,1,0,15,18,185,0,28,1,0,0,0,2,31,1,0,0,0,4,35,1,0,0,0,
-        6,50,1,0,0,0,8,71,1,0,0,0,10,73,1,0,0,0,12,81,1,0,0,0,14,94,1,0,
-        0,0,16,108,1,0,0,0,18,137,1,0,0,0,20,139,1,0,0,0,22,145,1,0,0,0,
-        24,153,1,0,0,0,26,161,1,0,0,0,28,29,3,2,1,0,29,30,5,0,0,1,30,1,1,
-        0,0,0,31,32,5,1,0,0,32,33,5,16,0,0,33,34,3,4,2,0,34,3,1,0,0,0,35,
-        39,5,9,0,0,36,38,3,6,3,0,37,36,1,0,0,0,38,41,1,0,0,0,39,37,1,0,0,
-        0,39,40,1,0,0,0,40,42,1,0,0,0,41,39,1,0,0,0,42,43,5,10,0,0,43,5,
-        1,0,0,0,44,51,3,10,5,0,45,51,3,8,4,0,46,51,3,12,6,0,47,51,3,14,7,
-        0,48,51,3,24,12,0,49,51,3,20,10,0,50,44,1,0,0,0,50,45,1,0,0,0,50,
-        46,1,0,0,0,50,47,1,0,0,0,50,48,1,0,0,0,50,49,1,0,0,0,51,7,1,0,0,
-        0,52,53,5,13,0,0,53,58,5,16,0,0,54,55,5,12,0,0,55,57,5,16,0,0,56,
-        54,1,0,0,0,57,60,1,0,0,0,58,56,1,0,0,0,58,59,1,0,0,0,59,61,1,0,0,
-        0,60,58,1,0,0,0,61,72,5,11,0,0,62,63,7,0,0,0,63,64,5,16,0,0,64,67,
-        5,20,0,0,65,68,3,16,8,0,66,68,3,18,9,0,67,65,1,0,0,0,67,66,1,0,0,
-        0,68,69,1,0,0,0,69,70,5,11,0,0,70,72,1,0,0,0,71,52,1,0,0,0,71,62,
-        1,0,0,0,72,9,1,0,0,0,73,74,5,16,0,0,74,77,5,20,0,0,75,78,3,16,8,
-        0,76,78,3,18,9,0,77,75,1,0,0,0,77,76,1,0,0,0,78,79,1,0,0,0,79,80,
-        5,11,0,0,80,11,1,0,0,0,81,82,5,4,0,0,82,86,5,7,0,0,83,87,3,18,9,
-        0,84,87,5,15,0,0,85,87,5,16,0,0,86,83,1,0,0,0,86,84,1,0,0,0,86,85,
-        1,0,0,0,87,88,1,0,0,0,88,89,5,8,0,0,89,92,3,4,2,0,90,91,5,5,0,0,
-        91,93,3,4,2,0,92,90,1,0,0,0,92,93,1,0,0,0,93,13,1,0,0,0,94,95,5,
-        6,0,0,95,96,5,7,0,0,96,97,3,18,9,0,97,98,5,8,0,0,98,99,3,4,2,0,99,
-        15,1,0,0,0,100,101,6,8,-1,0,101,102,5,7,0,0,102,103,3,16,8,0,103,
-        104,5,8,0,0,104,109,1,0,0,0,105,106,5,21,0,0,106,109,3,16,8,5,107,
-        109,7,1,0,0,108,100,1,0,0,0,108,105,1,0,0,0,108,107,1,0,0,0,109,
-        121,1,0,0,0,110,111,10,4,0,0,111,112,5,22,0,0,112,120,3,16,8,5,113,
-        114,10,3,0,0,114,115,5,23,0,0,115,120,3,16,8,4,116,117,10,2,0,0,
-        117,118,7,2,0,0,118,120,3,16,8,3,119,110,1,0,0,0,119,113,1,0,0,0,
-        119,116,1,0,0,0,120,123,1,0,0,0,121,119,1,0,0,0,121,122,1,0,0,0,
-        122,17,1,0,0,0,123,121,1,0,0,0,124,125,5,7,0,0,125,126,3,18,9,0,
-        126,127,5,8,0,0,127,138,1,0,0,0,128,129,7,1,0,0,129,130,5,25,0,0,
-        130,138,7,1,0,0,131,132,7,3,0,0,132,133,5,26,0,0,133,138,7,3,0,0,
-        134,135,5,27,0,0,135,138,3,18,9,0,136,138,5,15,0,0,137,124,1,0,0,
-        0,137,128,1,0,0,0,137,131,1,0,0,0,137,134,1,0,0,0,137,136,1,0,0,
-        0,138,19,1,0,0,0,139,140,5,2,0,0,140,141,5,7,0,0,141,142,3,22,11,
-        0,142,143,5,8,0,0,143,144,5,11,0,0,144,21,1,0,0,0,145,150,5,16,0,
-        0,146,147,5,12,0,0,147,149,5,16,0,0,148,146,1,0,0,0,149,152,1,0,
-        0,0,150,148,1,0,0,0,150,151,1,0,0,0,151,23,1,0,0,0,152,150,1,0,0,
-        0,153,154,5,3,0,0,154,155,5,7,0,0,155,156,3,26,13,0,156,157,5,8,
-        0,0,157,158,5,11,0,0,158,25,1,0,0,0,159,162,5,19,0,0,160,162,3,16,
-        8,0,161,159,1,0,0,0,161,160,1,0,0,0,162,170,1,0,0,0,163,166,5,12,
-        0,0,164,167,5,19,0,0,165,167,3,16,8,0,166,164,1,0,0,0,166,165,1,
-        0,0,0,167,169,1,0,0,0,168,163,1,0,0,0,169,172,1,0,0,0,170,168,1,
-        0,0,0,170,171,1,0,0,0,171,27,1,0,0,0,172,170,1,0,0,0,16,39,50,58,
-        67,71,77,86,92,108,119,121,137,150,161,166,170
+        6,1,6,1,6,3,6,89,8,6,1,7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,8,
+        1,8,1,8,1,8,3,8,105,8,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,5,8,
+        116,8,8,10,8,12,8,119,9,8,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,
+        9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,3,9,138,8,9,1,9,1,9,1,9,5,9,143,8,
+        9,10,9,12,9,146,9,9,1,10,1,10,1,10,1,10,1,10,1,10,1,11,1,11,1,11,
+        5,11,157,8,11,10,11,12,11,160,9,11,1,12,1,12,1,12,1,12,1,12,1,12,
+        1,13,1,13,3,13,170,8,13,1,13,1,13,1,13,3,13,175,8,13,5,13,177,8,
+        13,10,13,12,13,180,9,13,1,13,0,2,16,18,14,0,2,4,6,8,10,12,14,16,
+        18,20,22,24,26,0,3,1,0,13,14,1,0,16,18,2,0,21,21,24,24,193,0,28,
+        1,0,0,0,2,31,1,0,0,0,4,35,1,0,0,0,6,50,1,0,0,0,8,71,1,0,0,0,10,73,
+        1,0,0,0,12,81,1,0,0,0,14,90,1,0,0,0,16,104,1,0,0,0,18,137,1,0,0,
+        0,20,147,1,0,0,0,22,153,1,0,0,0,24,161,1,0,0,0,26,169,1,0,0,0,28,
+        29,3,2,1,0,29,30,5,0,0,1,30,1,1,0,0,0,31,32,5,1,0,0,32,33,5,16,0,
+        0,33,34,3,4,2,0,34,3,1,0,0,0,35,39,5,9,0,0,36,38,3,6,3,0,37,36,1,
+        0,0,0,38,41,1,0,0,0,39,37,1,0,0,0,39,40,1,0,0,0,40,42,1,0,0,0,41,
+        39,1,0,0,0,42,43,5,10,0,0,43,5,1,0,0,0,44,51,3,10,5,0,45,51,3,8,
+        4,0,46,51,3,12,6,0,47,51,3,14,7,0,48,51,3,24,12,0,49,51,3,20,10,
+        0,50,44,1,0,0,0,50,45,1,0,0,0,50,46,1,0,0,0,50,47,1,0,0,0,50,48,
+        1,0,0,0,50,49,1,0,0,0,51,7,1,0,0,0,52,53,5,13,0,0,53,58,5,16,0,0,
+        54,55,5,12,0,0,55,57,5,16,0,0,56,54,1,0,0,0,57,60,1,0,0,0,58,56,
+        1,0,0,0,58,59,1,0,0,0,59,61,1,0,0,0,60,58,1,0,0,0,61,72,5,11,0,0,
+        62,63,7,0,0,0,63,64,5,16,0,0,64,67,5,20,0,0,65,68,3,16,8,0,66,68,
+        3,18,9,0,67,65,1,0,0,0,67,66,1,0,0,0,68,69,1,0,0,0,69,70,5,11,0,
+        0,70,72,1,0,0,0,71,52,1,0,0,0,71,62,1,0,0,0,72,9,1,0,0,0,73,74,5,
+        16,0,0,74,77,5,20,0,0,75,78,3,16,8,0,76,78,3,18,9,0,77,75,1,0,0,
+        0,77,76,1,0,0,0,78,79,1,0,0,0,79,80,5,11,0,0,80,11,1,0,0,0,81,82,
+        5,4,0,0,82,83,5,7,0,0,83,84,3,18,9,0,84,85,5,8,0,0,85,88,3,4,2,0,
+        86,87,5,5,0,0,87,89,3,4,2,0,88,86,1,0,0,0,88,89,1,0,0,0,89,13,1,
+        0,0,0,90,91,5,6,0,0,91,92,5,7,0,0,92,93,3,18,9,0,93,94,5,8,0,0,94,
+        95,3,4,2,0,95,15,1,0,0,0,96,97,6,8,-1,0,97,98,5,7,0,0,98,99,3,16,
+        8,0,99,100,5,8,0,0,100,105,1,0,0,0,101,102,5,21,0,0,102,105,3,16,
+        8,5,103,105,7,1,0,0,104,96,1,0,0,0,104,101,1,0,0,0,104,103,1,0,0,
+        0,105,117,1,0,0,0,106,107,10,4,0,0,107,108,5,22,0,0,108,116,3,16,
+        8,5,109,110,10,3,0,0,110,111,5,23,0,0,111,116,3,16,8,4,112,113,10,
+        2,0,0,113,114,7,2,0,0,114,116,3,16,8,3,115,106,1,0,0,0,115,109,1,
+        0,0,0,115,112,1,0,0,0,116,119,1,0,0,0,117,115,1,0,0,0,117,118,1,
+        0,0,0,118,17,1,0,0,0,119,117,1,0,0,0,120,121,6,9,-1,0,121,122,5,
+        7,0,0,122,123,3,18,9,0,123,124,5,8,0,0,124,138,1,0,0,0,125,126,3,
+        16,8,0,126,127,5,25,0,0,127,128,3,16,8,0,128,138,1,0,0,0,129,130,
+        3,16,8,0,130,131,5,26,0,0,131,132,3,16,8,0,132,138,1,0,0,0,133,134,
+        5,27,0,0,134,138,3,18,9,3,135,138,5,16,0,0,136,138,5,15,0,0,137,
+        120,1,0,0,0,137,125,1,0,0,0,137,129,1,0,0,0,137,133,1,0,0,0,137,
+        135,1,0,0,0,137,136,1,0,0,0,138,144,1,0,0,0,139,140,10,5,0,0,140,
+        141,5,26,0,0,141,143,3,18,9,6,142,139,1,0,0,0,143,146,1,0,0,0,144,
+        142,1,0,0,0,144,145,1,0,0,0,145,19,1,0,0,0,146,144,1,0,0,0,147,148,
+        5,2,0,0,148,149,5,7,0,0,149,150,3,22,11,0,150,151,5,8,0,0,151,152,
+        5,11,0,0,152,21,1,0,0,0,153,158,5,16,0,0,154,155,5,12,0,0,155,157,
+        5,16,0,0,156,154,1,0,0,0,157,160,1,0,0,0,158,156,1,0,0,0,158,159,
+        1,0,0,0,159,23,1,0,0,0,160,158,1,0,0,0,161,162,5,3,0,0,162,163,5,
+        7,0,0,163,164,3,26,13,0,164,165,5,8,0,0,165,166,5,11,0,0,166,25,
+        1,0,0,0,167,170,5,19,0,0,168,170,3,16,8,0,169,167,1,0,0,0,169,168,
+        1,0,0,0,170,178,1,0,0,0,171,174,5,12,0,0,172,175,5,19,0,0,173,175,
+        3,16,8,0,174,172,1,0,0,0,174,173,1,0,0,0,175,177,1,0,0,0,176,171,
+        1,0,0,0,177,180,1,0,0,0,178,176,1,0,0,0,178,179,1,0,0,0,179,27,1,
+        0,0,0,180,178,1,0,0,0,16,39,50,58,67,71,77,88,104,115,117,137,144,
+        158,169,174,178
     ]
 
 class LPMSParser ( Parser ):
@@ -552,7 +555,7 @@ class LPMSParser ( Parser ):
 
                 elif la_ == 2:
                     self.state = 66
-                    self.logic_expr()
+                    self.logic_expr(0)
                     pass
 
 
@@ -635,7 +638,7 @@ class LPMSParser ( Parser ):
 
             elif la_ == 2:
                 self.state = 76
-                self.logic_expr()
+                self.logic_expr(0)
                 pass
 
 
@@ -677,12 +680,6 @@ class LPMSParser ( Parser ):
             return self.getTypedRuleContext(LPMSParser.Logic_exprContext,0)
 
 
-        def BOOLEAN(self):
-            return self.getToken(LPMSParser.BOOLEAN, 0)
-
-        def ID(self):
-            return self.getToken(LPMSParser.ID, 0)
-
         def ELSE_CONDICIONAL(self):
             return self.getToken(LPMSParser.ELSE_CONDICIONAL, 0)
 
@@ -717,36 +714,20 @@ class LPMSParser ( Parser ):
             self.match(LPMSParser.IF_CONDICIONAL)
             self.state = 82
             self.match(LPMSParser.E_PARAN)
-            self.state = 86
-            self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,6,self._ctx)
-            if la_ == 1:
-                self.state = 83
-                self.logic_expr()
-                pass
 
-            elif la_ == 2:
-                self.state = 84
-                self.match(LPMSParser.BOOLEAN)
-                pass
-
-            elif la_ == 3:
-                self.state = 85
-                self.match(LPMSParser.ID)
-                pass
-
-
-            self.state = 88
+            self.state = 83
+            self.logic_expr(0)
+            self.state = 84
             self.match(LPMSParser.D_PARAN)
-            self.state = 89
+            self.state = 85
             self.block()
-            self.state = 92
+            self.state = 88
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==5:
-                self.state = 90
+                self.state = 86
                 self.match(LPMSParser.ELSE_CONDICIONAL)
-                self.state = 91
+                self.state = 87
                 self.block()
 
 
@@ -809,15 +790,15 @@ class LPMSParser ( Parser ):
         self.enterRule(localctx, 14, self.RULE_whileStatement)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 94
+            self.state = 90
             self.match(LPMSParser.WHILE_CONDICIONAL)
-            self.state = 95
+            self.state = 91
             self.match(LPMSParser.E_PARAN)
-            self.state = 96
-            self.logic_expr()
-            self.state = 97
+            self.state = 92
+            self.logic_expr(0)
+            self.state = 93
             self.match(LPMSParser.D_PARAN)
-            self.state = 98
+            self.state = 94
             self.block()
         except RecognitionException as re:
             localctx.exception = re
@@ -898,25 +879,25 @@ class LPMSParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 108
+            self.state = 104
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [7]:
-                self.state = 101
+                self.state = 97
                 self.match(LPMSParser.E_PARAN)
-                self.state = 102
+                self.state = 98
                 self.expression(0)
-                self.state = 103
+                self.state = 99
                 self.match(LPMSParser.D_PARAN)
                 pass
             elif token in [21]:
-                self.state = 105
+                self.state = 101
                 self.match(LPMSParser.MINUS_OPERADOR)
-                self.state = 106
+                self.state = 102
                 self.expression(5)
                 pass
             elif token in [16, 17, 18]:
-                self.state = 107
+                self.state = 103
                 _la = self._input.LA(1)
                 if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 458752) != 0)):
                     self._errHandler.recoverInline(self)
@@ -928,65 +909,65 @@ class LPMSParser ( Parser ):
                 raise NoViableAltException(self)
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 121
+            self.state = 117
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 119
+                    self.state = 115
                     self._errHandler.sync(self)
-                    la_ = self._interp.adaptivePredict(self._input,9,self._ctx)
+                    la_ = self._interp.adaptivePredict(self._input,8,self._ctx)
                     if la_ == 1:
                         localctx = LPMSParser.ExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 110
+                        self.state = 106
                         if not self.precpred(self._ctx, 4):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
-                        self.state = 111
+                        self.state = 107
                         self.match(LPMSParser.MODULO_OPERADOR)
-                        self.state = 112
+                        self.state = 108
                         self.expression(5)
                         pass
 
                     elif la_ == 2:
                         localctx = LPMSParser.ExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 113
+                        self.state = 109
                         if not self.precpred(self._ctx, 3):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
-                        self.state = 114
+                        self.state = 110
                         self.match(LPMSParser.MUL_DIV_OPERADOR)
-                        self.state = 115
+                        self.state = 111
                         self.expression(4)
                         pass
 
                     elif la_ == 3:
                         localctx = LPMSParser.ExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 116
+                        self.state = 112
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                        self.state = 117
+                        self.state = 113
                         _la = self._input.LA(1)
                         if not(_la==21 or _la==24):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 118
+                        self.state = 114
                         self.expression(3)
                         pass
 
              
-                self.state = 123
+                self.state = 119
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -1007,45 +988,37 @@ class LPMSParser ( Parser ):
         def E_PARAN(self):
             return self.getToken(LPMSParser.E_PARAN, 0)
 
-        def logic_expr(self):
-            return self.getTypedRuleContext(LPMSParser.Logic_exprContext,0)
+        def logic_expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(LPMSParser.Logic_exprContext)
+            else:
+                return self.getTypedRuleContext(LPMSParser.Logic_exprContext,i)
 
 
         def D_PARAN(self):
             return self.getToken(LPMSParser.D_PARAN, 0)
 
-        def INT(self, i:int=None):
+        def expression(self, i:int=None):
             if i is None:
-                return self.getTokens(LPMSParser.INT)
+                return self.getTypedRuleContexts(LPMSParser.ExpressionContext)
             else:
-                return self.getToken(LPMSParser.INT, i)
+                return self.getTypedRuleContext(LPMSParser.ExpressionContext,i)
 
-        def FLOAT(self, i:int=None):
-            if i is None:
-                return self.getTokens(LPMSParser.FLOAT)
-            else:
-                return self.getToken(LPMSParser.FLOAT, i)
-
-        def ID(self, i:int=None):
-            if i is None:
-                return self.getTokens(LPMSParser.ID)
-            else:
-                return self.getToken(LPMSParser.ID, i)
 
         def RELACIONAL_OPERADOR(self):
             return self.getToken(LPMSParser.RELACIONAL_OPERADOR, 0)
-
-        def BOOLEAN(self, i:int=None):
-            if i is None:
-                return self.getTokens(LPMSParser.BOOLEAN)
-            else:
-                return self.getToken(LPMSParser.BOOLEAN, i)
 
         def IGUALDADE_OPERADOR(self):
             return self.getToken(LPMSParser.IGUALDADE_OPERADOR, 0)
 
         def NEG_OPERADOR(self):
             return self.getToken(LPMSParser.NEG_OPERADOR, 0)
+
+        def ID(self):
+            return self.getToken(LPMSParser.ID, 0)
+
+        def BOOLEAN(self):
+            return self.getToken(LPMSParser.BOOLEAN, 0)
 
         def getRuleIndex(self):
             return LPMSParser.RULE_logic_expr
@@ -1066,89 +1039,92 @@ class LPMSParser ( Parser ):
 
 
 
-
-    def logic_expr(self):
-
-        localctx = LPMSParser.Logic_exprContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 18, self.RULE_logic_expr)
-        self._la = 0 # Token type
+    def logic_expr(self, _p:int=0):
+        _parentctx = self._ctx
+        _parentState = self.state
+        localctx = LPMSParser.Logic_exprContext(self, self._ctx, _parentState)
+        _prevctx = localctx
+        _startState = 18
+        self.enterRecursionRule(localctx, 18, self.RULE_logic_expr, _p)
         try:
+            self.enterOuterAlt(localctx, 1)
             self.state = 137
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,11,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,10,self._ctx)
             if la_ == 1:
-                self.enterOuterAlt(localctx, 1)
-                self.state = 124
+                self.state = 121
                 self.match(LPMSParser.E_PARAN)
-                self.state = 125
-                self.logic_expr()
-                self.state = 126
+                self.state = 122
+                self.logic_expr(0)
+                self.state = 123
                 self.match(LPMSParser.D_PARAN)
                 pass
 
             elif la_ == 2:
-                self.enterOuterAlt(localctx, 2)
-                self.state = 128
-                _la = self._input.LA(1)
-                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 458752) != 0)):
-                    self._errHandler.recoverInline(self)
-                else:
-                    self._errHandler.reportMatch(self)
-                    self.consume()
-
-                self.state = 129
+                self.state = 125
+                self.expression(0)
+                self.state = 126
                 self.match(LPMSParser.RELACIONAL_OPERADOR)
-                self.state = 130
-                _la = self._input.LA(1)
-                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 458752) != 0)):
-                    self._errHandler.recoverInline(self)
-                else:
-                    self._errHandler.reportMatch(self)
-                    self.consume()
+                self.state = 127
+                self.expression(0)
                 pass
 
             elif la_ == 3:
-                self.enterOuterAlt(localctx, 3)
-                self.state = 131
-                _la = self._input.LA(1)
-                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 491520) != 0)):
-                    self._errHandler.recoverInline(self)
-                else:
-                    self._errHandler.reportMatch(self)
-                    self.consume()
-
-                self.state = 132
+                self.state = 129
+                self.expression(0)
+                self.state = 130
                 self.match(LPMSParser.IGUALDADE_OPERADOR)
-                self.state = 133
-                _la = self._input.LA(1)
-                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 491520) != 0)):
-                    self._errHandler.recoverInline(self)
-                else:
-                    self._errHandler.reportMatch(self)
-                    self.consume()
+                self.state = 131
+                self.expression(0)
                 pass
 
             elif la_ == 4:
-                self.enterOuterAlt(localctx, 4)
-                self.state = 134
+                self.state = 133
                 self.match(LPMSParser.NEG_OPERADOR)
-                self.state = 135
-                self.logic_expr()
+                self.state = 134
+                self.logic_expr(3)
                 pass
 
             elif la_ == 5:
-                self.enterOuterAlt(localctx, 5)
+                self.state = 135
+                self.match(LPMSParser.ID)
+                pass
+
+            elif la_ == 6:
                 self.state = 136
                 self.match(LPMSParser.BOOLEAN)
                 pass
 
+
+            self._ctx.stop = self._input.LT(-1)
+            self.state = 144
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,11,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
+                    if self._parseListeners is not None:
+                        self.triggerExitRuleEvent()
+                    _prevctx = localctx
+                    localctx = LPMSParser.Logic_exprContext(self, _parentctx, _parentState)
+                    self.pushNewRecursionContext(localctx, _startState, self.RULE_logic_expr)
+                    self.state = 139
+                    if not self.precpred(self._ctx, 5):
+                        from antlr4.error.Errors import FailedPredicateException
+                        raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
+                    self.state = 140
+                    self.match(LPMSParser.IGUALDADE_OPERADOR)
+                    self.state = 141
+                    self.logic_expr(6) 
+                self.state = 146
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,11,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
             self._errHandler.recover(self, re)
         finally:
-            self.exitRule()
+            self.unrollRecursionContexts(_parentctx)
         return localctx
 
 
@@ -1201,15 +1177,15 @@ class LPMSParser ( Parser ):
         self.enterRule(localctx, 20, self.RULE_input)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 139
+            self.state = 147
             self.match(LPMSParser.INPUT_FUNCTION)
-            self.state = 140
+            self.state = 148
             self.match(LPMSParser.E_PARAN)
-            self.state = 141
+            self.state = 149
             self.varList()
-            self.state = 142
+            self.state = 150
             self.match(LPMSParser.D_PARAN)
-            self.state = 143
+            self.state = 151
             self.match(LPMSParser.FIM_DE_LINHA)
         except RecognitionException as re:
             localctx.exception = re
@@ -1266,17 +1242,17 @@ class LPMSParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 145
+            self.state = 153
             self.match(LPMSParser.ID)
-            self.state = 150
+            self.state = 158
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==12:
-                self.state = 146
+                self.state = 154
                 self.match(LPMSParser.VIRGULA)
-                self.state = 147
+                self.state = 155
                 self.match(LPMSParser.ID)
-                self.state = 152
+                self.state = 160
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -1338,15 +1314,15 @@ class LPMSParser ( Parser ):
         self.enterRule(localctx, 24, self.RULE_output)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 153
+            self.state = 161
             self.match(LPMSParser.PRINT_FUNCTION)
-            self.state = 154
+            self.state = 162
             self.match(LPMSParser.E_PARAN)
-            self.state = 155
+            self.state = 163
             self.valueList()
-            self.state = 156
+            self.state = 164
             self.match(LPMSParser.D_PARAN)
-            self.state = 157
+            self.state = 165
             self.match(LPMSParser.FIM_DE_LINHA)
         except RecognitionException as re:
             localctx.exception = re
@@ -1410,41 +1386,41 @@ class LPMSParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 161
+            self.state = 169
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [19]:
-                self.state = 159
+                self.state = 167
                 self.match(LPMSParser.STRING)
                 pass
             elif token in [7, 16, 17, 18, 21]:
-                self.state = 160
+                self.state = 168
                 self.expression(0)
                 pass
             else:
                 raise NoViableAltException(self)
 
-            self.state = 170
+            self.state = 178
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==12:
-                self.state = 163
+                self.state = 171
                 self.match(LPMSParser.VIRGULA)
-                self.state = 166
+                self.state = 174
                 self._errHandler.sync(self)
                 token = self._input.LA(1)
                 if token in [19]:
-                    self.state = 164
+                    self.state = 172
                     self.match(LPMSParser.STRING)
                     pass
                 elif token in [7, 16, 17, 18, 21]:
-                    self.state = 165
+                    self.state = 173
                     self.expression(0)
                     pass
                 else:
                     raise NoViableAltException(self)
 
-                self.state = 172
+                self.state = 180
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -1462,6 +1438,7 @@ class LPMSParser ( Parser ):
         if self._predicates == None:
             self._predicates = dict()
         self._predicates[8] = self.expression_sempred
+        self._predicates[9] = self.logic_expr_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:
             raise Exception("No predicate with index:" + str(ruleIndex))
@@ -1479,6 +1456,11 @@ class LPMSParser ( Parser ):
 
             if predIndex == 2:
                 return self.precpred(self._ctx, 2)
+         
+
+    def logic_expr_sempred(self, localctx:Logic_exprContext, predIndex:int):
+            if predIndex == 3:
+                return self.precpred(self._ctx, 5)
          
 
 

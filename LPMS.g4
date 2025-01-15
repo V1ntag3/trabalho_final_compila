@@ -30,10 +30,13 @@ expression : E_PARAN expression D_PARAN
                  | (INT | FLOAT | ID);
 
 logic_expr : E_PARAN logic_expr D_PARAN
-                | (INT | FLOAT | ID) (RELACIONAL_OPERADOR) (INT | FLOAT | ID)
-                | (INT | FLOAT | ID | BOOLEAN) (IGUALDADE_OPERADOR) (INT | FLOAT | ID | BOOLEAN)
+                | expression RELACIONAL_OPERADOR expression
+                | logic_expr IGUALDADE_OPERADOR logic_expr
+                | expression IGUALDADE_OPERADOR expression
                 | NEG_OPERADOR logic_expr
+                | ID
                 | BOOLEAN;
+
 
 input : INPUT_FUNCTION E_PARAN varList D_PARAN FIM_DE_LINHA;
 
