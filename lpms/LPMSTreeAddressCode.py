@@ -2,6 +2,7 @@ from gen.LPMSParser import LPMSParser
 from gen.LPMSVisitor import LPMSVisitor
 from antlr4 import TerminalNode
 
+
 class ThreeAddressCodeGenerator(LPMSVisitor):
     def __init__(self):
         self.symbol_table = {}
@@ -25,7 +26,10 @@ class ThreeAddressCodeGenerator(LPMSVisitor):
         elif ctx.ID():
             return ctx.ID().getText()
         elif (
-            ctx.MUL_DIV_OPERADOR() or ctx.SOMA_OPERADOR() or ctx.MINUS_OPERADOR() or ctx.MODULO_OPERADOR()
+            ctx.MUL_DIV_OPERADOR()
+            or ctx.SOMA_OPERADOR()
+            or ctx.MINUS_OPERADOR()
+            or ctx.MODULO_OPERADOR()
         ):
             left = self.evaluateExpression(ctx.expression(0))
             right = self.evaluateExpression(ctx.expression(1))
@@ -70,8 +74,16 @@ class ThreeAddressCodeGenerator(LPMSVisitor):
                     f"Erro semântico: Variável '{var_name}' já declarada."
                 )
             else:
-                default_value = 0 if var_type in ["int", "float"] else "False" if var_type == "bool" else ""
-                self.symbol_table[var_name] = {"type": var_type, "value": default_value, "is_const": is_const}
+                default_value = (
+                    0
+                    if var_type in ["int", "float"]
+                    else "False" if var_type == "bool" else ""
+                )
+                self.symbol_table[var_name] = {
+                    "type": var_type,
+                    "value": default_value,
+                    "is_const": is_const,
+                }
                 self.emit(f"DECLARE {var_name} : {var_type}")
 
     def visitAssignmentStatement(self, ctx: LPMSParser.AssignmentStatementContext):
@@ -93,7 +105,9 @@ class ThreeAddressCodeGenerator(LPMSVisitor):
         for var in ctx.varList().ID():
             var_name = var.getText()
             if var_name not in self.symbol_table:
-                self.errors.append(f"Erro semântico: Variável '{var_name}' não declarada no 'input'.")
+                self.errors.append(
+                    f"Erro semântico: Variável '{var_name}' não declarada no 'input'."
+                )
             else:
                 self.emit(f"READ {var_name}")
 

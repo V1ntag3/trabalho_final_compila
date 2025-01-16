@@ -8,6 +8,7 @@ class SemanticAnalyzer(LPMSVisitor):
         self.symbol_table = {}
         self.errors = []
 
+    # dar valor de expressoes algebricas
     def evaluateExpression(self, ctx: LPMSParser.ExpressionContext):
         if ctx.INT():
             return int(ctx.INT().getText())
@@ -64,10 +65,11 @@ class SemanticAnalyzer(LPMSVisitor):
 
         return None
 
+    # dar valor de expressoes logicas
     def evaluateLogicExpression(self, ctx: LPMSParser.Logic_exprContext):
         if ctx.BOOLEAN():
             return bool(ctx.BOOLEAN().getText())
-        elif ctx.ID():  
+        elif ctx.ID():
             var_name = ctx.ID().getText()
             if var_name in self.symbol_table:
                 return self.symbol_table[var_name]["value"]
@@ -135,84 +137,7 @@ class SemanticAnalyzer(LPMSVisitor):
 
         return None
 
-    # atribui aos IDs tipos e valores iniciais
-    def visitDeclarations(self, ctx: LPMSParser.DeclarationsContext):
-        if ctx:
-            for var in ctx.ID():
-                var_name = var.getText()
-                var_type = ctx.TYPE()
-                is_const = ctx.TYPE_CONST() is not None
-
-                if var_name in self.symbol_table:
-                    self.errors.append(
-                        f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Variável '{var_name}' já declarada."
-                    )
-                else:
-                    if var_type == "int":
-                        default_value = 0
-                    elif var_type == "float":
-                        default_value = 0.0
-                    elif var_type == "bool":
-                        default_value = False
-                    elif var_type == "str":
-                        default_value = ""
-                    else:
-                        default_value = None
-
-                    if is_const:
-                        if ctx.expression():
-                            var_type = self.inferExpressionType(ctx.expression())
-                            default_value = self.evaluateExpression(ctx.expression())
-                        elif ctx.logic_expr:
-                            var_type = self.inferLogicExpressionType(ctx.logic_expr())
-                            default_value = self.evaluateLogicExpression(
-                                ctx.logic_expr()
-                            )
-                        else:
-                            self.errors.append(
-                                f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Constante '{var_name}' deve ser inicializada com um valor."
-                            )
-
-                    self.symbol_table[var_name] = {
-                        "type": var_type,
-                        "value": default_value,
-                        "is_const": is_const,
-                    }
-
-    # Atribuir valores as variaveis
-    def visitAssignmentStatement(self, ctx: LPMSParser.AssignmentStatementContext):
-        var_name = ctx.ID().getText()
-        # Verificar reatribuiçao
-        if var_name not in self.symbol_table:
-            self.errors.append(
-                f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Variável '{var_name}' não declarada usada."
-            )
-        else:
-            var_info = self.symbol_table[var_name]
-            expected_type = var_info["type"]
-            is_const = var_info["is_const"]
-            # Verificar se nao foi atribuido const novamente
-            if is_const:
-                self.errors.append(
-                    f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Variável constante '{var_name}' não pode ser reatribuída."
-                )
-            else:
-                actual_type = self.inferExpressionType(ctx.expression())
-                value = None
-                if actual_type is None and ctx.logic_expr():
-                    actual_type = self.inferLogicExpressionType(ctx.logic_expr())
-                    value = self.evaluateLogicExpression(ctx.logic_expr())
-                else:
-                    value = self.evaluateExpression(ctx.expression())
-                # Verifica se o tipo atribuido é igual ao da variavel
-                if str(expected_type) != str(actual_type):
-                    self.errors.append(
-                        f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Atribuição incompatível. Variável '{var_name}' é do tipo '{expected_type}', "
-                        f"mas recebeu expressão do tipo '{actual_type}'."
-                    )
-                else:
-                    self.symbol_table[var_name]["value"] = value
-
+    # inferir tipos de expressoes algebricas
     def inferExpressionType(self, ctx: LPMSParser.ExpressionContext):
 
         if (
@@ -253,6 +178,7 @@ class SemanticAnalyzer(LPMSVisitor):
             return "float"
         return None
 
+    # inferir tipos de expressoes logicas
     def inferLogicExpressionType(self, ctx: LPMSParser.Logic_exprContext):
         if ctx.BOOLEAN():
             return "bool"
@@ -335,6 +261,85 @@ class SemanticAnalyzer(LPMSVisitor):
             return "bool"
         return None
 
+    # atribui aos IDs tipos e valores iniciais
+    def visitDeclarations(self, ctx: LPMSParser.DeclarationsContext):
+        if ctx:
+            for var in ctx.ID():
+                var_name = var.getText()
+                var_type = ctx.TYPE()
+                is_const = ctx.TYPE_CONST() is not None
+
+                if var_name in self.symbol_table:
+                    self.errors.append(
+                        f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Variável '{var_name}' já declarada."
+                    )
+                else:
+                    if var_type == "int":
+                        default_value = 0
+                    elif var_type == "float":
+                        default_value = 0.0
+                    elif var_type == "bool":
+                        default_value = False
+                    elif var_type == "str":
+                        default_value = ""
+                    else:
+                        default_value = None
+
+                    if is_const:
+                        if ctx.expression():
+                            var_type = self.inferExpressionType(ctx.expression())
+                            default_value = self.evaluateExpression(ctx.expression())
+                        elif ctx.logic_expr:
+                            var_type = self.inferLogicExpressionType(ctx.logic_expr())
+                            default_value = self.evaluateLogicExpression(
+                                ctx.logic_expr()
+                            )
+                        else:
+                            self.errors.append(
+                                f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Constante '{var_name}' deve ser inicializada com um valor."
+                            )
+
+                    self.symbol_table[var_name] = {
+                        "type": var_type,
+                        "value": default_value,
+                        "is_const": is_const,
+                    }
+
+    # atribuir valores as variaveis
+    def visitAssignmentStatement(self, ctx: LPMSParser.AssignmentStatementContext):
+        var_name = ctx.ID().getText()
+        # Verificar reatribuiçao
+        if var_name not in self.symbol_table:
+            self.errors.append(
+                f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Variável '{var_name}' não declarada usada."
+            )
+        else:
+            var_info = self.symbol_table[var_name]
+            expected_type = var_info["type"]
+            is_const = var_info["is_const"]
+            # Verificar se nao foi atribuido const novamente
+            if is_const:
+                self.errors.append(
+                    f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Variável constante '{var_name}' não pode ser reatribuída."
+                )
+            else:
+                actual_type = self.inferExpressionType(ctx.expression())
+                value = None
+                if actual_type is None and ctx.logic_expr():
+                    actual_type = self.inferLogicExpressionType(ctx.logic_expr())
+                    value = self.evaluateLogicExpression(ctx.logic_expr())
+                else:
+                    value = self.evaluateExpression(ctx.expression())
+                # Verifica se o tipo atribuido é igual ao da variavel
+                if str(expected_type) != str(actual_type):
+                    self.errors.append(
+                        f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Atribuição incompatível. Variável '{var_name}' é do tipo '{expected_type}', "
+                        f"mas recebeu expressão do tipo '{actual_type}'."
+                    )
+                else:
+                    self.symbol_table[var_name]["value"] = value
+
+    # verificar bloco de input
     def visitInput(self, ctx: LPMSParser.InputContext):
         var_list = ctx.varList()
         for var in var_list.ID():
@@ -351,6 +356,7 @@ class SemanticAnalyzer(LPMSVisitor):
                         f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Tipo '{var_type}' da variável '{var_name}' não é compatível com o 'input'."
                     )
 
+    # verificar bloco de print
     def visitOutput(self, ctx: LPMSParser.OutputContext):
         value_list = ctx.valueList()
 
@@ -365,6 +371,7 @@ class SemanticAnalyzer(LPMSVisitor):
             elif isinstance(value, LPMSParser.LogicExprContext):
                 self.inferLogicExpressionType(value)
 
+    # verificar bloco while
     def visitWhileStatement(self, ctx: LPMSParser.WhileStatementContext):
         condition = ctx.logic_expr()
 
@@ -376,6 +383,7 @@ class SemanticAnalyzer(LPMSVisitor):
 
         self.visit(ctx.block())
 
+    # verificar bloco if e else se existir
     def visitIfStatement(self, ctx: LPMSParser.IfStatementContext):
         condition = ctx.logic_expr()
 
@@ -385,6 +393,7 @@ class SemanticAnalyzer(LPMSVisitor):
             self.errors.append(
                 f"Erro semântico na linha {ctx.start.line} - Condição do 'if' deve ser do tipo 'bool', mas é '{condition_type}'."
             )
+
         self.visit(ctx.block(0))
 
         if ctx.ELSE_CONDICIONAL():

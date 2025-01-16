@@ -1,5 +1,6 @@
 from antlr4.error.ErrorListener import ErrorListener
 
+
 class LPMSErrorListener(ErrorListener):
     def __init__(self):
         super(LPMSErrorListener, self).__init__()
