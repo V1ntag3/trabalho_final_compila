@@ -7,17 +7,41 @@ class SemanticAnalyzer(LPMSVisitor):
     def __init__(self):
         self.symbol_table = {}
         self.errors = []
+        
+        # Novas variaveis para gerar codigo de 3 enderecos e codigo jasmin
+        self.three_address_code = []  
+        self.jasmin_code = []        
+        self.temp_counter = 0        
+        self.label_counter = 0 
+        self.var_map = {}  # Para mapear as variáveis para os índices
+        self.var_count = 1  # Contador para gerar índices únicos  
 
+    # Variaveis temporarias
+    def new_temp(self):
+        self.temp_counter += 1
+        return f"t{self.temp_counter}"
+
+    # rotulos
+    def new_label(self):
+        self.label_counter += 1
+        return f"L{self.label_counter}"
+    
     # dar valor de expressoes algebricas
     def evaluateExpression(self, ctx: LPMSParser.ExpressionContext):
         if ctx.INT():
-            return int(ctx.INT().getText())
+            temp = self.new_temp()
+            value = int(ctx.INT().getText())
+            self.three_address_code.append(f"{temp} = {value}")
+            return temp
         elif ctx.FLOAT():
-            return float(ctx.FLOAT().getText())
+            temp = self.new_temp()
+            value = float(ctx.FLOAT().getText())
+            self.three_address_code.append(f"{temp} = {value}")
+            return temp
         elif ctx.ID():
             var_name = ctx.ID().getText()
             if var_name in self.symbol_table:
-                return self.symbol_table[var_name]["value"]
+                return var_name
             else:
                 self.errors.append(
                     f"Erro semântico na linha {ctx.start.line} - Variável '{var_name}' não declarada."
@@ -33,20 +57,12 @@ class SemanticAnalyzer(LPMSVisitor):
             and ctx.expression(0)
             and ctx.expression(1)
         ):
-            left_value = self.evaluateExpression(ctx.expression(0))
-            right_value = self.evaluateExpression(ctx.expression(1))
-
-            if left_value is None or right_value is None:
-                return None
-
-            if ctx.SOMA_OPERADOR():
-                return left_value + right_value
-            elif ctx.MINUS_OPERADOR():
-                return left_value - right_value
-            elif ctx.MUL_DIV_OPERADOR():
-                return left_value * right_value
-            elif ctx.MODULO_OPERADOR():
-                return left_value % right_value
+            left_temp = self.evaluateExpression(ctx.expression(0))
+            right_temp = self.evaluateExpression(ctx.expression(1))
+            operator = ctx.getChild(1).getText()
+            temp = self.new_temp()
+            self.three_address_code.append(f"{temp} = {left_temp} {operator} {right_temp}")
+            return temp
         elif ctx.E_PARAN() and ctx.D_PARAN():
             return self.evaluateExpression(ctx.expression(0))
         elif ctx.MINUS_OPERADOR() and ctx.expression(0):
@@ -56,7 +72,10 @@ class SemanticAnalyzer(LPMSVisitor):
                 return None
 
             if isinstance(value, (int, float)):
-                return -value
+                value_temp = self.evaluateExpression(ctx.expression(0))
+                temp = self.new_temp()
+                self.three_address_code.append(f"{temp} = -{value_temp}")
+                return temp
             else:
                 self.errors.append(
                     f"Erro semântico na linha {ctx.start.line} - O operador '-' só pode ser aplicado a números, mas foi aplicado a '{value}'."
@@ -314,30 +333,32 @@ class SemanticAnalyzer(LPMSVisitor):
                 f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Variável '{var_name}' não declarada usada."
             )
         else:
-            var_info = self.symbol_table[var_name]
-            expected_type = var_info["type"]
-            is_const = var_info["is_const"]
-            # Verificar se nao foi atribuido const novamente
-            if is_const:
-                self.errors.append(
-                    f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Variável constante '{var_name}' não pode ser reatribuída."
-                )
-            else:
-                actual_type = self.inferExpressionType(ctx.expression())
-                value = None
-                if actual_type is None and ctx.logic_expr():
-                    actual_type = self.inferLogicExpressionType(ctx.logic_expr())
-                    value = self.evaluateLogicExpression(ctx.logic_expr())
-                else:
-                    value = self.evaluateExpression(ctx.expression())
-                # Verifica se o tipo atribuido é igual ao da variavel
-                if str(expected_type) != str(actual_type):
-                    self.errors.append(
-                        f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Atribuição incompatível. Variável '{var_name}' é do tipo '{expected_type}', "
-                        f"mas recebeu expressão do tipo '{actual_type}'."
-                    )
-                else:
-                    self.symbol_table[var_name]["value"] = value
+            expr_temp = self.evaluateExpression(ctx.expression())
+            self.three_address_code.append(f"{var_name} = {expr_temp}")
+            # var_info = self.symbol_table[var_name]
+            # expected_type = var_info["type"]
+            # is_const = var_info["is_const"]
+            # # Verificar se nao foi atribuido const novamente
+            # if is_const:
+            #     self.errors.append(
+            #         f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Variável constante '{var_name}' não pode ser reatribuída."
+            #     )
+            # else:
+            #     actual_type = self.inferExpressionType(ctx.expression())
+            #     value = None
+            #     if actual_type is None and ctx.logic_expr():
+            #         actual_type = self.inferLogicExpressionType(ctx.logic_expr())
+            #         value = self.evaluateLogicExpression(ctx.logic_expr())
+            #     else:
+            #         value = self.evaluateExpression(ctx.expression())
+            #     # Verifica se o tipo atribuido é igual ao da variavel
+            #     if str(expected_type) != str(actual_type):
+            #         self.errors.append(
+            #             f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Atribuição incompatível. Variável '{var_name}' é do tipo '{expected_type}', "
+            #             f"mas recebeu expressão do tipo '{actual_type}'."
+            #         )
+            #     else:
+            #         self.symbol_table[var_name]["value"] = value
 
     # verificar bloco de input
     def visitInput(self, ctx: LPMSParser.InputContext):
@@ -398,6 +419,63 @@ class SemanticAnalyzer(LPMSVisitor):
 
         if ctx.ELSE_CONDICIONAL():
             self.visit(ctx.block(1))
+    def generate_jasmin(self):
+        self.jasmin_code.append(".class public Main")
+        self.jasmin_code.append(".super java/lang/Object")
+        self.jasmin_code.append(".method public static main([Ljava/lang/String;)V")
+        self.jasmin_code.append("    .limit stack 10")
+        self.jasmin_code.append("    .limit locals 10")
+
+        # Para cada linha de código de 3 endereços, processar as instruções
+        for instr in self.three_address_code:
+            parts = instr.split()
+
+            # Atribuição simples (e.g., t1 = 10)
+            if "=" in instr and len(parts) == 3:
+                dest, value = parts[0], parts[2]
+                # Atribuir índice para a variável
+                if dest not in self.var_map:
+                    self.var_map[dest] = self.var_count
+                    self.var_count += 1
+                dest_index = self.var_map[dest]
+                self.jasmin_code.append(f"    ldc {value}")
+                self.jasmin_code.append(f"    astore {dest_index}")
+
+            # Operação binária (e.g., t4 = t1 + t3)
+            elif "=" in instr and len(parts) == 5:
+                dest, op, left, right = parts[0], parts[2], parts[3], parts[4]
+                # Atribuir índices para as variáveis
+                if dest not in self.var_map:
+                    self.var_map[dest] = self.var_count
+                    self.var_count += 1
+                if left not in self.var_map:
+                    self.var_map[left] = self.var_count
+                    self.var_count += 1
+                if right not in self.var_map:
+                    self.var_map[right] = self.var_count
+                    self.var_count += 1
+
+                dest_index = self.var_map[dest]
+                left_index = self.var_map[left]
+                right_index = self.var_map[right]
+
+                # Carregar os valores para a pilha
+                self.jasmin_code.append(f"    aload {left_index}")
+                self.jasmin_code.append(f"    aload {right_index}")
+                if op == "+":
+                    self.jasmin_code.append("    iadd")
+                elif op == "-":
+                    self.jasmin_code.append("    isub")
+                elif op == "*":
+                    self.jasmin_code.append("    imul")
+                elif op == "/":
+                    self.jasmin_code.append("    idiv")
+                # Armazenar o resultado na variável destino
+                self.jasmin_code.append(f"    astore {dest_index}")
+
+        self.jasmin_code.append("    return")
+        self.jasmin_code.append(".end method")
+
 
     def has_errors(self):
         return len(self.errors) > 0
