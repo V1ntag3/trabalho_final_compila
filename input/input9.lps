@@ -1,0 +1,10 @@
+Program Test9 {
+    int a;
+    a = 10;
+    if(a == 5){
+        int a;
+        a = 20;
+        print("Valor de a no escopo interno:", a);
+    }
+    print("Valor de a no escopo externo:", a);
+}

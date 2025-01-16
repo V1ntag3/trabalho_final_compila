@@ -1,0 +1,5 @@
+Program Test1 {
+    int x;
+    x = 10;
+    print("Valor de x:", x);
+}

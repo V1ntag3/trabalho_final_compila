@@ -1,0 +1,4 @@
+Program Test8 {
+    int 1var; // Deve gerar erro léxico (identificador inválido)
+    int x = 5 // Deve gerar erro sintático (falta de ponto e vírgula)
+}

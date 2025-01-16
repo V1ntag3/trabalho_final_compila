@@ -1,16 +1,10 @@
-import argparse
-from antlr4 import *
-from gen import LPMSParser
-from gen.LPMSLexer import LPMSLexer
-from lpms.LPMSErrorListener import LPMSErrorListener
-from lpms.LPMSTreeAddressCode import ThreeAddressCodeGenerator
-
-import argparse
 from antlr4 import *
 from gen.LPMSLexer import LPMSLexer
 from gen.LPMSParser import LPMSParser
 from lpms.LPMSErrorListener import LPMSErrorListener
 from lpms.LPMSBaseListener import SemanticAnalyzer
+from lpms.LPMSTreeAddressCode import ThreeAddressCodeGenerator
+import argparse
 
 def print_ast(tree, parser, indent=0):
     def recursive_print(node, level):
@@ -24,8 +18,8 @@ def print_ast(tree, parser, indent=0):
     return recursive_print(tree, indent)
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("arquivo", type=str)
+    parser = argparse.ArgumentParser(description="Compilador LPMS: Análise semântica e geração de código intermediário.")
+    parser.add_argument("arquivo", type=str, help="Caminho para o arquivo de código-fonte LPMS.")
     args = parser.parse_args()
 
     input_stream = FileStream(args.arquivo)
@@ -40,19 +34,33 @@ def main():
     parser.addErrorListener(error_listener)
 
     tree = parser.program()
+    
+    # Análise semântica
     analyzer = SemanticAnalyzer()
     analyzer.visit(tree)
-    # Criar o gerador de código de 3 endereços
-    code_generator = ThreeAddressCodeGenerator(analyzer)
-    
-    # Gerar o código de três endereços
-    code = code_generator.get_code()
-    
-    # Imprimir o código gerado
-    for quad in code:
-        print(quad)
+
+    if analyzer.has_errors():
+        print("Erros Semânticos Encontrados:")
+        for error in analyzer.get_errors():
+            print(error)
+        return
+
+    print("Análise semântica concluída com sucesso!")
+
+    # Gerador de código de três endereços
+    try:
+        code_generator = ThreeAddressCodeGenerator()  # Ajustar se necessário
+        code_generator.visit(tree)
+        code = code_generator.get_three_address_code()  # Substituir por método correto
+
+        print("Código de Três Endereços Gerado:")
+        for quad in code:
+            print(quad)
+    except AttributeError as e:
+        print("Erro ao gerar o código intermediário:", e)
+    except Exception as e:
+        print("Erro inesperado:", e)
             
 
-   
 if __name__ == '__main__':
     main()

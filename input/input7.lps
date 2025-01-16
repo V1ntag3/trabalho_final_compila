@@ -1,0 +1,7 @@
+Program Test7 {
+    int a, b, soma;
+    print("Digite dois números:");
+    input(a, b);
+    soma = a + b;
+    print("Soma dos números:", soma);
+}

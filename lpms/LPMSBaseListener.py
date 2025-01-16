@@ -8,6 +8,133 @@ class SemanticAnalyzer(LPMSVisitor):
         self.symbol_table = {}
         self.errors = []
 
+    def evaluateExpression(self, ctx: LPMSParser.ExpressionContext):
+        if ctx.INT():
+            return int(ctx.INT().getText())
+        elif ctx.FLOAT():
+            return float(ctx.FLOAT().getText())
+        elif ctx.ID():
+            var_name = ctx.ID().getText()
+            if var_name in self.symbol_table:
+                return self.symbol_table[var_name]["value"]
+            else:
+                self.errors.append(
+                    f"Erro semântico na linha {ctx.start.line} - Variável '{var_name}' não declarada."
+                )
+                return None
+        elif (
+            (
+                ctx.MUL_DIV_OPERADOR()
+                or ctx.SOMA_OPERADOR()
+                or ctx.MINUS_OPERADOR()
+                or ctx.MODULO_OPERADOR()
+            )
+            and ctx.expression(0)
+            and ctx.expression(1)
+        ):
+            left_value = self.evaluateExpression(ctx.expression(0))
+            right_value = self.evaluateExpression(ctx.expression(1))
+
+            if left_value is None or right_value is None:
+                return None
+
+            if ctx.SOMA_OPERADOR():
+                return left_value + right_value
+            elif ctx.MINUS_OPERADOR():
+                return left_value - right_value
+            elif ctx.MUL_DIV_OPERADOR():
+                return left_value * right_value
+            elif ctx.MODULO_OPERADOR():
+                return left_value % right_value
+        elif ctx.E_PARAN() and ctx.D_PARAN():
+            return self.evaluateExpression(ctx.expression(0))
+        elif ctx.MINUS_OPERADOR() and ctx.expression(0):
+            value = self.evaluateExpression(ctx.expression(0))
+
+            if value is None:
+                return None
+
+            if isinstance(value, (int, float)):
+                return -value
+            else:
+                self.errors.append(
+                    f"Erro semântico na linha {ctx.start.line} - O operador '-' só pode ser aplicado a números, mas foi aplicado a '{value}'."
+                )
+                return None
+
+        return None
+
+    def evaluateLogicExpression(self, ctx: LPMSParser.Logic_exprContext):
+        if ctx.BOOLEAN():
+            return bool(ctx.BOOLEAN().getText())
+        elif ctx.ID():  
+            var_name = ctx.ID().getText()
+            if var_name in self.symbol_table:
+                return self.symbol_table[var_name]["value"]
+            else:
+                self.errors.append(
+                    f"Erro semântico na linha {ctx.start.line} - Variável '{var_name}' não declarada."
+                )
+                return None
+        elif ctx.NOT_OPERADOR() and ctx.logic_expr(0):
+            value = self.evaluateLogicalExpression(ctx.logic_expr(0))
+
+            if value is None:
+                return None
+
+            if isinstance(value, bool):
+                return not value
+            else:
+                self.errors.append(
+                    f"Erro semântico na linha {ctx.start.line} - O operador '!' só pode ser aplicado a valores booleanos, mas foi aplicado a '{value}'."
+                )
+                return None
+        elif ctx.E_PARAN() and ctx.D_PARAN():
+            return self.evaluateLogicalExpression(ctx.logic_expr())
+        elif ctx.IGUALDADE_OPERADOR() and ctx.expression(0) and ctx.expression(1):
+            left_value = self.evaluateAlgebraicExpression(ctx.expression(0))
+            right_value = self.evaluateAlgebraicExpression(ctx.expression(1))
+
+            if left_value is None or right_value is None:
+                return None
+            if left_value == right_value:
+                return True
+            else:
+                return False
+
+        elif ctx.IGUALDADE_OPERADOR() and ctx.logic_expr(0) and ctx.logic_expr(1):
+            left_value = self.evaluateLogicExpression(ctx.logic_expr(0))
+            right_value = self.evaluateLogicExpression(ctx.logic_expr(1))
+
+            if left_value is None or right_value is None:
+                return None
+
+            if left_value == right_value:
+                return True
+            else:
+                return False
+
+        elif ctx.RELACIONAL_OPERADOR() and ctx.expression(0) and ctx.expression(1):
+
+            left_value = self.evaluateAlgebraicExpression(ctx.expression(0))
+            right_value = self.evaluateAlgebraicExpression(ctx.expression(1))
+
+            if left_value is None or right_value is None:
+                return None
+
+            if ctx.RELACIONAL_OPERADOR().getText() == ">":
+                return left_value > right_value
+            elif ctx.RELACIONAL_OPERADOR().getText() == "<":
+                return left_value < right_value
+            elif ctx.RELACIONAL_OPERADOR().getText() == ">=":
+                return left_value >= right_value
+            elif ctx.RELACIONAL_OPERADOR().getText() == "<=":
+                return left_value <= right_value
+            elif ctx.RELACIONAL_OPERADOR().getText() == "!=":
+                return left_value != right_value
+
+        return None
+
     # atribui aos IDs tipos e valores iniciais
     def visitDeclarations(self, ctx: LPMSParser.DeclarationsContext):
         if ctx:
@@ -31,9 +158,20 @@ class SemanticAnalyzer(LPMSVisitor):
                         default_value = ""
                     else:
                         default_value = None
-                        
-                    if var_type == None:
-                        var_type = "const"
+
+                    if is_const:
+                        if ctx.expression():
+                            var_type = self.inferExpressionType(ctx.expression())
+                            default_value = self.evaluateExpression(ctx.expression())
+                        elif ctx.logic_expr:
+                            var_type = self.inferLogicExpressionType(ctx.logic_expr())
+                            default_value = self.evaluateLogicExpression(
+                                ctx.logic_expr()
+                            )
+                        else:
+                            self.errors.append(
+                                f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Constante '{var_name}' deve ser inicializada com um valor."
+                            )
 
                     self.symbol_table[var_name] = {
                         "type": var_type,
@@ -60,19 +198,23 @@ class SemanticAnalyzer(LPMSVisitor):
                 )
             else:
                 actual_type = self.inferExpressionType(ctx.expression())
-
+                value = None
                 if actual_type is None and ctx.logic_expr():
                     actual_type = self.inferLogicExpressionType(ctx.logic_expr())
-
+                    value = self.evaluateLogicExpression(ctx.logic_expr())
+                else:
+                    value = self.evaluateExpression(ctx.expression())
                 # Verifica se o tipo atribuido é igual ao da variavel
                 if str(expected_type) != str(actual_type):
                     self.errors.append(
                         f"Erro semântico na linha {ctx.ID().symbol.line}:{ctx.ID().symbol.column} - Atribuição incompatível. Variável '{var_name}' é do tipo '{expected_type}', "
                         f"mas recebeu expressão do tipo '{actual_type}'."
                     )
+                else:
+                    self.symbol_table[var_name]["value"] = value
 
-    def inferExpressionType(self, ctx:LPMSParser.ExpressionContext):
-        
+    def inferExpressionType(self, ctx: LPMSParser.ExpressionContext):
+
         if (
             ctx.MUL_DIV_OPERADOR()
             or ctx.SOMA_OPERADOR()

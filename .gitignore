@@ -1,1 +1,54 @@
 ./venv
+
+
+# Byte-compiled files
+**/__pycache__/
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Virtual environment directories
+venv_neuralforecast/
+venv_sklearn/
+venv/
+env/
+.venv/
+ENV/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# PyInstaller
+#  Typically creates a build/ folder and a .spec file
+build/
+*.spec
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Python language server files
+.pyre/
+
+# VS Code settings folder
+.vscode/
+
+# MacOS specific files
+**/.DS_Store
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.bak
+*.swp
+*.swo
+*.tmp

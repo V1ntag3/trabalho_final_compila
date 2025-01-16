@@ -1,0 +1,10 @@
+Program Test4 {
+    int a, b;
+    a = 10;
+    b = 20;
+    if (a > b) {
+        print("A é maior que B");
+    } else {
+        print("B é maior ou igual a A");
+    }
+}

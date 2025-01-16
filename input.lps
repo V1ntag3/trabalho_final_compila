@@ -1,5 +1,5 @@
 Program Test10 {
-    int x;
+    int x = 3;
     x = 0;
     while (x < 10) {
         if (x == 5) {

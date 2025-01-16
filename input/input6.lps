@@ -1,0 +1,6 @@
+Program Test6 {
+    int x, y;
+    x = 5 + 3 * 2; // Deve avaliar corretamente para 11
+    y = (5 + 3) * 2; // Deve avaliar para 16
+    print("Resultado de x:", x, "Resultado de y:", y);
+}
