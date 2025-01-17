@@ -35,6 +35,15 @@ class LPMSListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LPMSParser#blockWhile.
+    def enterBlockWhile(self, ctx:LPMSParser.BlockWhileContext):
+        pass
+
+    # Exit a parse tree produced by LPMSParser#blockWhile.
+    def exitBlockWhile(self, ctx:LPMSParser.BlockWhileContext):
+        pass
+
+
     # Enter a parse tree produced by LPMSParser#statement.
     def enterStatement(self, ctx:LPMSParser.StatementContext):
         pass

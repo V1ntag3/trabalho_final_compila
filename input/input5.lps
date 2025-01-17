@@ -4,6 +4,7 @@ Program Test5 {
     while (count > 0) {
         print("Contagem:", count);
         count = count - 1;
+        break;
     }
     print("Fim da contagem");
 }

@@ -6,21 +6,22 @@ from lpms.LPMSErrorListener import LPMSErrorListener
 from lpms.LPMSBaseListener import SemanticAnalyzer
 
 
-def print_ast(tree, parser, indent=0):
-    def recursive_print(node, level):
-        if node.getChildCount() == 0:
-            return "  " * level + node.getText()
+def print_ast(node, parser, indent=0):
+    if node.getChildCount() == 0:
+        return "  " * indent + f"Leaf: {node.getText()}"
 
-        children = [recursive_print(child, level + 1) for child in node.getChildren()]
-        rule_name = parser.ruleNames[node.getRuleIndex()]
-        return (
-            "  " * level
-            + f"({rule_name}\n"
-            + "\n".join(children)
-            + f"\n{'  ' * level})"
-        )
+    rule_name = parser.ruleNames[node.getRuleIndex()]
+    children = [
+        print_ast(child, parser, indent + 1)
+        for child in node.getChildren()
+        if child.getChildCount() > 0 
+    ]
 
-    return recursive_print(tree, indent)
+    return (
+        "  " * indent
+        + f"Node: {rule_name}\n"
+        + "\n".join(children)
+    )
 
 
 def main():

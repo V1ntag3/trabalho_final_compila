@@ -1,7 +1,10 @@
 Program Test10 {
-    int x = 3;
+    int x;
     x = 0;
     while (x < 10) {
+        
+        int y, z;
+
         if (x == 5) {
             break;
         }

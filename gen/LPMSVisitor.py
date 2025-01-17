@@ -24,6 +24,11 @@ class LPMSVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LPMSParser#blockWhile.
+    def visitBlockWhile(self, ctx:LPMSParser.BlockWhileContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by LPMSParser#statement.
     def visitStatement(self, ctx:LPMSParser.StatementContext):
         return self.visitChildren(ctx)

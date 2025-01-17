@@ -2,6 +2,7 @@ Program Test4 {
     int a, b;
     a = 10;
     b = 20;
+    break;
     if (a > b) {
         print("A é maior que B");
     } else {

@@ -4,7 +4,9 @@ program : programSection EOF;
 
 programSection : PROGRAM_INIT ID block;
 
-block : E_CHAVES (statement | BREAK FIM_DE_LINHA)* D_CHAVES ;
+block : E_CHAVES (statement)* D_CHAVES ;
+
+blockWhile : E_CHAVES (statement | BREAK FIM_DE_LINHA)* D_CHAVES ;
 
 
 statement : assignmentStatement
@@ -21,7 +23,7 @@ assignmentStatement : ID (ATRIBUICAO_OPERADOR (expression | logic_expr) ) FIM_DE
 
 ifStatement : IF_CONDICIONAL E_PARAN (logic_expr) D_PARAN block (ELSE_CONDICIONAL block)?;
 
-whileStatement : WHILE_CONDICIONAL E_PARAN logic_expr D_PARAN block ;
+whileStatement : WHILE_CONDICIONAL E_PARAN logic_expr D_PARAN blockWhile ;
 
 expression : E_PARAN expression D_PARAN
                  | MINUS_OPERADOR expression

@@ -381,7 +381,7 @@ class SemanticAnalyzer(LPMSVisitor):
                 f"Erro semântico na linha {ctx.start.line} - Condição do 'while' deve ser do tipo 'bool', mas é '{condition_type}'."
             )
 
-        self.visit(ctx.block())
+        self.visit(ctx.blockWhile())
 
     # verificar bloco if e else se existir
     def visitIfStatement(self, ctx: LPMSParser.IfStatementContext):
