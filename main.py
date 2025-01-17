@@ -4,25 +4,7 @@ from gen.LPMSLexer import LPMSLexer
 from gen.LPMSParser import LPMSParser
 from lpms.LPMSErrorListener import LPMSErrorListener
 from lpms.LPMSBaseListener import SemanticAnalyzer
-
-
-def print_ast(node, parser, indent=0):
-    if node.getChildCount() == 0:
-        return "  " * indent + f"Leaf: {node.getText()}"
-
-    rule_name = parser.ruleNames[node.getRuleIndex()]
-    children = [
-        print_ast(child, parser, indent + 1)
-        for child in node.getChildren()
-        if child.getChildCount() > 0 
-    ]
-
-    return (
-        "  " * indent
-        + f"Node: {rule_name}\n"
-        + "\n".join(children)
-    )
-
+from antlr4.tree.Trees import Trees
 
 def main():
     parser = argparse.ArgumentParser()
@@ -51,7 +33,8 @@ def main():
         if analyzer.has_errors():
             print(analyzer.get_errors()[0])
         else:
-            print(print_ast(tree, parser))
+            tree_dot = Trees.toStringTree(tree, None, parser)
+            print(tree_dot)
 
 
 if __name__ == "__main__":
