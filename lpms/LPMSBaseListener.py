@@ -30,21 +30,17 @@ class SemanticAnalyzer(LPMSVisitor):
 
         variables = set()
         strings = {}
-
+        defined_variables = []
         for code in self.three_address_code_assembly:
-            if code.startswith("print"):  # Detecta instrução de impressão
-                value_list = code[6:].strip()  # Remove "print " e obtém o conteúdo
-                if value_list.startswith('"') and value_list.endswith(
-                    '"'
-                ):  # É uma string
+            if code.startswith("print"):
+                value_list = code[6:].strip()
+                if value_list.startswith('"') and value_list.endswith('"'):
                     if value_list not in strings:
                         label = f"msg{len(strings)}"
                         strings[value_list] = label
 
-                        data_code.append(
-                            f"{label} db {value_list}, 0xA, 0"
-                        )  # Adiciona string com quebra de linha
-                else:  # É uma variável
+                        data_code.append(f"{label} db {value_list}, 0xA, 0")
+                else:
                     variables.add(value_list)
             else:
                 parts = code.split(" = ")
@@ -52,29 +48,36 @@ class SemanticAnalyzer(LPMSVisitor):
                     var, expression = parts
                     variables.add(var)
         bss_code.append("section .bss")
+        bss_code.append(f"    num resb 20")
+        bss_code.append(f"    num_len resb 1")
+
         for var in variables:
-            bss_code.append(f"    {var} resd 1")
+            bss_code.append(f"    {var} resq 1")
+           
 
         if strings:
             text_code.insert(0, "section .data")
             for string, label in strings.items():
                 text_code.append(f"{label}: db {string}, 0xA, 0")
-                
+
         text_code.append("section .text")
         text_code.append("    global _start")
         text_code.append("\n_start:")
 
-        for (index, code) in enumerate(self.three_address_code_assembly):
+        for index, code in enumerate(self.three_address_code_assembly):
             label_next = ""
 
-            if index + 1 < len(self.three_address_code_assembly)-1:
-                if self.three_address_code_assembly[index+1].startswith("if"):
-                    print(self.three_address_code_assembly[index+1].split()[0])
-                    label_next = self.three_address_code_assembly[index+1].split()[3]
+            if index + 1 < len(self.three_address_code_assembly) - 1:
+                if self.three_address_code_assembly[index + 1].startswith("if"):
+                    if len(self.three_address_code_assembly[index + 1].split()) == 4:
+                        label_next = self.three_address_code_assembly[index + 1].split()[3]
+                    else:
+                        label_next = self.three_address_code_assembly[index + 1].split()[4]
+
             parts = code.split(" = ")
+            
             if len(parts) == 2:
                 var, expression = parts
-
                 if " " in expression:
                     operator_index = expression.index(" ")
                     left_operand = expression[:operator_index]
@@ -82,130 +85,146 @@ class SemanticAnalyzer(LPMSVisitor):
                     right_operand = expression[operator_index + 3 :]
                     if not left_operand.isdigit():
                         left_operand = f"[{left_operand}]"
+                    if not right_operand.isdigit():
+                        right_operand = f"[{right_operand}]"
+                        
+                    if left_operand == "True":
+                        left_operand = "1"
+                    elif left_operand == "False":
+                        left_operand = "0"
+
+                    if right_operand == "True":
+                        right_operand = "1"
+                    elif right_operand == "False":
+                        right_operand = "0"
+                    
                     # Comparações
                     if operator == ">":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    cmp eax, {right_operand}")
-                        text_code.append(f"    jg {label_next}")
-                    elif operator == "<":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    cmp eax, {right_operand}")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    cmp rax, {right_operand}")
                         text_code.append(f"    jl {label_next}")
+                    elif operator == "<":
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    cmp rax, {right_operand}")
+                        text_code.append(f"    jg {label_next}")
                     elif operator == "==":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    cmp eax, {right_operand}")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    cmp rax, {right_operand}")
                         text_code.append(f"    je {label_next}")
                     elif operator == "!=":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    cmp eax, {right_operand}")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    cmp rax, {right_operand}")
                         text_code.append(f"    jne {label_next}")
                     elif operator == ">=":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    cmp eax, {right_operand}")
-                        text_code.append(f"    jge {label_next}")
-                    elif operator == "<=":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    cmp eax, {right_operand}")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    cmp rax, {right_operand}")
                         text_code.append(f"    jle {label_next}")
+                    elif operator == "<=":
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    cmp rax, {right_operand}")
+                        text_code.append(f"    jge {label_next}")
 
                     # Operações Aritméticas
                     elif operator == "+":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    add eax, [{right_operand}]")
-                        text_code.append(f"    mov [{var}], eax")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    add rax, {right_operand}")
+                        text_code.append(f"    mov [{var}], rax")
                     elif operator == "-":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    sub eax, [{right_operand}]")
-                        text_code.append(f"    mov [{var}], eax")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    sub rax, {right_operand}")
+                        text_code.append(f"    mov [{var}], rax")
                     elif operator == "*":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    imul eax, [{right_operand}]")
-                        text_code.append(f"    mov [{var}], eax")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    imul rax, {right_operand}")
+                        text_code.append(f"    mov [{var}], rax")
+                    elif operator == "/":
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    mov rbx, {right_operand}")
+
+                        text_code.append(f"    idiv rbx")
+                        text_code.append(f"    mov rax, rbx")
+
+                        text_code.append(f"    mov [{var}], rax")
                     elif operator == "%":
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    mov ebx, [{right_operand}]")
-                        text_code.append(f"    xor edx, edx")
-                        text_code.append(f"    div ebx")
-                        text_code.append(f"    mov [{var}], edx")
-                        text_code.append(f"    mov eax, {left_operand}")
-                        text_code.append(f"    mov ebx, [{right_operand}]")
-                        text_code.append(f"    xor edx, edx")
-                        text_code.append(f"    div ebx")
-                        text_code.append(f"    mov [{var}], eax")
-
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    mov rbx, {right_operand}")
+                        text_code.append(f"    xor rdx, rdx")
+                        text_code.append(f"    div rbx")
+                        text_code.append(f"    mov [{var}], rdx")
+                        text_code.append(f"    mov rax, {left_operand}")
+                        text_code.append(f"    mov rbx, {right_operand}")
+                        text_code.append(f"    xor rdx, rdx")
+                        text_code.append(f"    div rbx")
+                        text_code.append(f"    mov [{var}], rax")
+                    
                 else:
-                    text_code.append(f"    mov dword [{var}], {expression}")
-
+                    print(code)
+                    if var in defined_variables and not expression.isdigit():
+                        text_code.append(f"    mov [{var}], rax")
+                    else:
+                        text_code.append(f"    mov qword [{var}], {expression}")
+                        defined_variables.append(var)
             elif code.startswith("goto"):
                 label = code.split()[1]
                 text_code.append(f"    jmp {label}")
             elif code.startswith("if"):
                 parts = code.split(" ")
-                condition = parts[1]
                 label = parts[3]
-
-                # text_code.append(f"    mov eax, [{condition}]")
-                # text_code.append(f"    cmp eax, 0")
-                # text_code.append(f"    je {label}")
+                if len(parts) == 4 or len(parts) == 5:
+                    if parts[1] == 'True':
+                        text_code.append(f"    jmp {parts[-1]}")
+                    
+                 
+                    
             elif code.startswith("print"):
-                value_list = code[6:].strip()  # Remove "print " e obtém o conteúdo
-                if value_list.startswith('"') and value_list.endswith(
-                    '"'
-                ):  # É uma string
+                value_list = code[6:].strip()
+                if value_list.startswith('"') and value_list.endswith('"'):  #
                     label = strings[value_list]
-                    text_code.append(f"    mov rax, 1")  # syscall: write
-                    text_code.append(f"    mov rdi, 1")  # stdout
-                    text_code.append(f"    mov rsi, {label}")  # Endereço da string
-                    text_code.append(
-                        f"    mov rdx, {len(value_list) - 2 + 1}"
-                    )  # Comprimento da string + '\n'
+                    text_code.append(f"    mov rax, 1")
+                    text_code.append(f"    mov rdi, 1")
+                    text_code.append(f"    mov rsi, {label}")
+                    text_code.append(f"    mov rdx, {len(value_list) - 2 + 1}")
                     text_code.append(f"    syscall")
-                else:  # É uma variável
-                    text_code.append(
-                        f"    mov eax, [{value_list}]"
-                    )  # Carrega o valor da variável
-                    text_code.append(
-                        f"    call print_int"
-                    )  # Chama a função auxiliar para imprimir inteiros
+                else:
+                    text_code.append(f"    mov rax, [{value_list}]")
+                    text_code.append(f"    call print_int")
 
             else:
                 text_code.append(f"{code}")
 
-        text_code.append("    mov eax, 60")
-        text_code.append("    xor edi, edi")
+        text_code.append("    mov rax, 60")
+        text_code.append("    xor rdi, rdi")
         text_code.append("    syscall")
         text_code.append(
             """
 print_int:
-    ; Converte o número inteiro em string e imprime
-    push rdi
-    push rsi
-    push rdx
+    mov rcx, num        ; Ponteiro para o buffer num
+    mov rbx, 10         ; Divisor para obter dígitos
+    xor rdx, rdx        ; Limpa rdx para a divisão
 
-    mov rsi, rsp             ; Ponteiro para a string (stack)
-    mov rcx, 10              ; Base decimal
-    xor rdx, rdx
+decimal_loop:
+    xor rdx, rdx        ; Limpa rdx
+    div rbx             ; Divide rax por 10: quociente em rax, resto em rdx
+    add dl, '0'         ; Converte o dígito (resto) em ASCII
+    dec rcx             ; Move o ponteiro para trás
+    mov [rcx], dl       ; Armazena o dígito no buffer
+    test rax, rax       ; Verifica se o quociente é 0
+    jnz decimal_loop    ; Continua se ainda há dígitos para processar
 
-print_loop:
-    xor rdx, rdx             ; Limpa rdx
-    div rcx                  ; Divide rax por 10
-    add dl, '0'              ; Converte dígito para caractere
-    dec rsi                  ; Move ponteiro para trás
-    mov [rsi], dl            ; Armazena dígito na string
-    test rax, rax            ; Verifica se ainda há dígitos
-    jnz print_loop
+    ; Calcula o comprimento do número
+    mov rbx, num
+    sub rbx, rcx        ; Comprimento = endereço inicial - ponteiro atual
+    mov [num_len], bl   ; Armazena o comprimento
 
-    mov rdx, rsp             ; Ponteiro para a string
-    mov rax, 1               ; syscall: write
-    mov rdi, 1               ; stdout
-    sub rdx, rsi             ; Tamanho da string
+    ; Imprime o número
+    mov rax, 1          ; syscall: write
+    mov rdi, 1          ; stdout
+    mov rsi, rcx        ; Ponteiro para o início do número
+    mov rdx, rbx        ; Comprimento do número
     syscall
-
-    pop rdx
-    pop rsi
-    pop rdi
     ret
-"""
+
+                        """
         )
         return "\n".join(bss_code + text_code)
 
@@ -263,7 +282,7 @@ print_loop:
     # dar valor de expressoes logicas
     def evaluateLogicExpression(self, ctx: LPMSParser.Logic_exprContext):
         if ctx.BOOLEAN():
-            return bool(ctx.BOOLEAN().getText())
+            return ctx.BOOLEAN().getText()
         elif ctx.ID():
             var_name = ctx.ID().getText()
             if var_name in self.symbol_table:
@@ -586,20 +605,24 @@ print_loop:
                 value_type = value.symbol.type
                 if value_type == LPMSParser.STRING:
                     self.only_assembly_add_three_address_code(
-                        f'print {value.getText()}'
+                        f"print {value.getText()}"
                     )
                 elif value_type == LPMSParser.ID:
+                    # Aqui retornamos o nome da variável (getText() fornece o nome)
+                    variable_name = value.getText()
                     self.only_assembly_add_three_address_code(
-                        f"print {value.getText()}"
+                        f"print {variable_name}"
                     )
 
             elif isinstance(value, LPMSParser.ExpressionContext):
                 inferred_value = self.inferExpressionType(value)
-                self.only_assembly_add_three_address_code(f"print {inferred_value}")
+        
+                self.only_assembly_add_three_address_code(f"print {value.getText()}")
 
             elif isinstance(value, LPMSParser.LogicExprContext):
                 inferred_value = self.inferLogicExpressionType(value)
                 self.only_assembly_add_three_address_code(f"print {inferred_value}")
+
 
     # verificar bloco while
     def visitWhileStatement(self, ctx: LPMSParser.WhileStatementContext):

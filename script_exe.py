@@ -8,7 +8,7 @@ def compile_assembly(assembly_file, output_file):
 
 def link_object_to_executable(object_file, executable_file):
     print(f"Linking object file {object_file} to executable {executable_file}...")
-    link_command = ["clang", "-arch", "arm64", "-o", executable_file, object_file]
+    link_command = ["clang", "-arch", "arm64", "-o", executable_file, object_file]  # Para Apple Silicon (arm64)
     subprocess.run(link_command, check=True)
 
 def make_executable(executable_file):

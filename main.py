@@ -41,7 +41,8 @@ def main():
             print(analyzer.get_errors()[0])
         else:
             write_to_files(analyzer.three_address_code_assembly, analyzer.generate_assembly_code())
-            script_exe.main()
+            for i in analyzer.three_address_code_assembly:
+                print(i)
 
 if __name__ == "__main__":
     main()

@@ -1,18 +1,11 @@
 Program Test10 {
     int x, y;
-    x = 0;
-    y = 3;
-    if(6 > 3){
-        if(x<4){
-            x = 5;
-            print("dentro do if", "dentro de nv");
-        }
-       x = 6;
-       print("IF");
-    }else{
-       x = 0;
-           print("Else");
+    x = 40;
 
-    }
-    x = 2;
+   while(x > 0){
+    print(x, " loop ");
+    x = x - 2;
+
+   }
+   print("finalizou");
 }
