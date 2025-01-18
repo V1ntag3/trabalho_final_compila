@@ -2,41 +2,23 @@ section .bss
     num resb 20
     num_len resb 1
     y resq 1
-    t3 resq 1
     x resq 1
-    t2 resq 1
-section .data
-msg0: db " loop ", 0xA, 0
-msg1: db "finalizou", 0xA, 0
 section .text
     global _start
 
 _start:
     mov qword [x], 0
     mov qword [y], 0
-    mov qword [x], 40
-L0:
-    mov rax, [x]
-    cmp rax, 0
-    jl L1
+    mov rax, 0
+    mov rdi, 0
+    lea rsi, [x]
+    mov rdx, 20
+    syscall
+    xor rax, rax
+    mov rbx, 10
+    call input_wait
     mov rax, [x]
     call print_int
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, msg0
-    mov rdx, 7
-    syscall
-    mov rax, [x]
-    sub rax, 2
-    mov [t3], rax
-    mov [x], rax
-    jmp L0
-L1:
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, msg1
-    mov rdx, 10
-    syscall
     mov rax, 60
     xor rdi, rdi
     syscall
@@ -66,6 +48,34 @@ decimal_loop:
     mov rsi, rcx        ; Ponteiro para o início do número
     mov rdx, rbx        ; Comprimento do número
     syscall
+    ret
+
+string_to_int:
+    ; rsi = endereço da string de entrada
+    xor rax, rax       ; Limpa rax (acumulador do número)
+    xor rcx, rcx       ; Limpa rcx (contador)
+string_to_int_loop:
+    movzx rdx, byte [rsi + rcx]  ; Pega o byte atual da string
+    test rdx, rdx               ; Verifica se é o final da string
+    jz string_to_int_done       ; Se for zero (fim), sai
+    sub rdx, '0'                ; Converte de ASCII para valor numérico
+    imul rax, rax, 10           ; Multiplica o acumulador por 10
+    add rax, rdx                ; Adiciona o dígito ao acumulador
+    inc rcx                     ; Incrementa o contador
+    jmp string_to_int_loop      ; Repete o loop
+string_to_int_done:
+    ret
+    
+input_wait:
+    ; Preparando para ler a entrada
+    mov rax, 0          ; Syscall para leitura (0 - read)
+    mov rdi, 0          ; stdin (entrada padrão)
+    lea rsi, [num]      ; Endereço de armazenamento da entrada
+    mov rdx, 20         ; Máximo de 20 bytes
+    syscall             ; Executa a leitura
+
+    ; Agora o código aguarda a entrada, o programa só continua quando pressionar "Enter"
+    ; O código vai parar aqui até a entrada ser fornecida
     ret
 
                         

@@ -1,13 +1,4 @@
 x = 0
 y = 0
-x = 40
-L0:
-t2 = x > 0
-if not t2 goto L1
+input x
 print x
-print " loop "
-t3 = x - 2
-x = t3
-goto L0
-L1:
-print "finalizou"

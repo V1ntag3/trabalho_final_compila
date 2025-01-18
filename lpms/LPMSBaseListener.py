@@ -174,7 +174,22 @@ class SemanticAnalyzer(LPMSVisitor):
                     if parts[1] == 'True':
                         text_code.append(f"    jmp {parts[-1]}")
                     
-                 
+            elif code.startswith("input"):
+                # Extrai a variável onde o valor será armazenado
+                variable = code.split()[1]
+                
+                # Gerar código de leitura (input)
+                text_code.append(f"    mov rax, 0")  # syscall para leitura
+                text_code.append(f"    mov rdi, 0")  # stdin
+                text_code.append(f"    lea rsi, [{variable}]")  # Endereço da variável
+                text_code.append(f"    mov rdx, 20")  # Tamanho máximo de entrada
+                text_code.append(f"    syscall")  # Chama a syscall para ler a entrada
+                
+                # (Opcional) Limpeza do buffer após a leitura (se necessário)
+                text_code.append(f"    xor rax, rax")  # Limpa rax (se necessário)
+                text_code.append(f"    mov rbx, 10")  # Para conversão de string para número (se necessário)
+                text_code.append(f"    call input_wait")  # Pode ser necessário um processo de conversão, dependendo do uso do valor
+        
                     
             elif code.startswith("print"):
                 value_list = code[6:].strip()
@@ -222,6 +237,34 @@ decimal_loop:
     mov rsi, rcx        ; Ponteiro para o início do número
     mov rdx, rbx        ; Comprimento do número
     syscall
+    ret
+
+string_to_int:
+    ; rsi = endereço da string de entrada
+    xor rax, rax       ; Limpa rax (acumulador do número)
+    xor rcx, rcx       ; Limpa rcx (contador)
+string_to_int_loop:
+    movzx rdx, byte [rsi + rcx]  ; Pega o byte atual da string
+    test rdx, rdx               ; Verifica se é o final da string
+    jz string_to_int_done       ; Se for zero (fim), sai
+    sub rdx, '0'                ; Converte de ASCII para valor numérico
+    imul rax, rax, 10           ; Multiplica o acumulador por 10
+    add rax, rdx                ; Adiciona o dígito ao acumulador
+    inc rcx                     ; Incrementa o contador
+    jmp string_to_int_loop      ; Repete o loop
+string_to_int_done:
+    ret
+    
+input_wait:
+    ; Preparando para ler a entrada
+    mov rax, 0          ; Syscall para leitura (0 - read)
+    mov rdi, 0          ; stdin (entrada padrão)
+    lea rsi, [num]      ; Endereço de armazenamento da entrada
+    mov rdx, 20         ; Máximo de 20 bytes
+    syscall             ; Executa a leitura
+
+    ; Agora o código aguarda a entrada, o programa só continua quando pressionar "Enter"
+    ; O código vai parar aqui até a entrada ser fornecida
     ret
 
                         """
@@ -594,6 +637,9 @@ decimal_loop:
                 if str(var_type) not in ["int", "float", "str", "bool"]:
                     self.errors.append(
                         f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Tipo '{var_type}' da variável '{var_name}' não é compatível com o 'input'."
+                    )
+                self.only_assembly_add_three_address_code(
+                        f"input {var_name}"
                     )
 
     # verificar bloco de print

@@ -1,11 +1,5 @@
 Program Test10 {
-    int x, y;
-    x = 40;
-
-   while(x > 0){
-    print(x, " loop ");
-    x = x - 2;
-
-   }
-   print("finalizou");
+   int x, y;
+   input(x);
+   print(x);
 }
