@@ -45,3 +45,5 @@ Quando terminar, desative o ambiente virtual:
 deactivate
 ```
 
+install nasm
+install libiconv

@@ -1,0 +1,26 @@
+x = 0
+y = 0
+x = 0
+y = 3
+t0 = 6 > 3
+if t0 goto L1
+goto L2
+L1:
+t3 = x < 4
+if t3 goto L4
+goto L5
+L4:
+x = 5
+print "dentro do if"
+print "dentro de nv"
+goto L5
+L5:
+x = 6
+print "IF"
+goto L6
+L2:
+x = 0
+print "Else"
+goto L6
+L6:
+x = 2

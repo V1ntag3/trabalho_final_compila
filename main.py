@@ -4,7 +4,14 @@ from gen.LPMSLexer import LPMSLexer
 from gen.LPMSParser import LPMSParser
 from lpms.LPMSErrorListener import LPMSErrorListener
 from lpms.LPMSBaseListener import SemanticAnalyzer
-from antlr4.tree.Trees import Trees
+import script_exe 
+def write_to_files(three_address_code, assembly_code):
+    with open('three_address_code.txt', 'w') as f:
+        for line in three_address_code:
+            f.write(f"{line}\n")
+    
+    with open('assembly_code.s', 'w') as f:
+        f.write(assembly_code)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -33,9 +40,8 @@ def main():
         if analyzer.has_errors():
             print(analyzer.get_errors()[0])
         else:
-            tree_dot = Trees.toStringTree(tree, None, parser)
-            print(tree_dot)
-
+            write_to_files(analyzer.three_address_code_assembly, analyzer.generate_assembly_code())
+            script_exe.main()
 
 if __name__ == "__main__":
     main()

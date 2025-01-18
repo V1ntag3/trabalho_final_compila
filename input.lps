@@ -1,15 +1,18 @@
 Program Test10 {
-    int x;
+    int x, y;
     x = 0;
-    while (x < 10) {
-        
-        int y, z;
-
-        if (x == 5) {
-            break;
+    y = 3;
+    if(6 > 3){
+        if(x<4){
+            x = 5;
+            print("dentro do if", "dentro de nv");
         }
-        print("Valor de x:", x);
-        x = x + 1;
+       x = 6;
+       print("IF");
+    }else{
+       x = 0;
+           print("Else");
+
     }
-    print("Fim do loop");
+    x = 2;
 }
