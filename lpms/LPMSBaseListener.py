@@ -161,7 +161,6 @@ class SemanticAnalyzer(LPMSVisitor):
                         text_code.append(f"    mov [{var}], rax")
 
                 else:
-                    print(code)
                     if var in defined_variables and not expression.isdigit():
                         text_code.append(f"    mov [{var}], rax")
                     else:
