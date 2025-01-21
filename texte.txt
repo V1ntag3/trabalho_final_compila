@@ -1,7 +1,48 @@
-
-
-[
-    ('Print', ['"Contagem:"', 'count']), 
-    ('Assignment', 'count', ('-', 'count', 1)), 
-    'break']
-('Program', 'Test5', [('Declaration', 'int', ['count']), ('Assignment', 'count', 5), ('While', ('>', 'count', 0), [('Print', ['"Contagem:"', 'count']), ('Assignment', 'count', ('-', 'count', 1)), 'break']), ('Print', ['"Fim da contagem"'])])
+(
+    'Program', 
+    'Test5', 
+    [
+        (
+            'Declaration', 
+            'int', 
+            ['count']
+        ), 
+        ('Assignment', 
+            'count', 
+        5
+        ), 
+            (
+                'While', 
+                (
+                    '>', 
+                    'count', 
+                    0
+                ), 
+                [
+                    (
+                        'Print', 
+                        [
+                            '"Contagem:"', 
+                            'count'
+                        ]
+                    ), 
+                    (
+                        'Assignment', 
+                        'count', 
+                        (
+                            '-', 
+                            'count', 
+                            1
+                        )
+                    ), 
+                    'break'
+                ]
+            ), 
+        (
+                'Print', 
+                [
+                    '"Fim da contagem"'
+                ]
+        )
+    ]
+)

@@ -14,6 +14,7 @@ class CustomASTVisitor(LPMSVisitor):
 
     def visitProgramSection(self, ctx: LPMSParser.ProgramSectionContext):
         return self.visitChildren(ctx)
+    
 
     def visitBlock(self, ctx: LPMSParser.BlockContext):
         statements = [self.visit(statement) for statement in ctx.statement()]
@@ -26,17 +27,15 @@ class CustomASTVisitor(LPMSVisitor):
         if ctx.ATRIBUICAO_OPERADOR():
             if ctx.expression():
                 expression = self.visit(ctx.expression())
-                return ("Declaration", var_type, variables, expression)
+                return ("Declaration:", var_type, variables, expression)
             elif ctx.logic_expr():
-                # Se for uma expressão lógica (incluindo BOOLEAN), visite-a
                 logic_expr = self.visit(ctx.logic_expr())
-                return ("Declaration", var_type, variables, logic_expr)
+                return ("Declaration:", var_type, variables, logic_expr)
             else:
-                # Caso não haja atribuição, apenas retorne a declaração
-                return ("Declaration", var_type, variables)
+                return ("Declaration:", var_type, variables)
 
         else:
-            return ("Declaration", var_type, variables)
+            return ("Declaration:", var_type, variables)
 
     def visitAssignmentStatement(self, ctx: LPMSParser.AssignmentStatementContext):
         var_name = ctx.ID().getText()
@@ -45,7 +44,7 @@ class CustomASTVisitor(LPMSVisitor):
             if ctx.expression()
             else self.visit(ctx.logic_expr())
         )
-        return ("Assignment", var_name, expression)
+        return ("Assignment:", var_name, expression)
 
     def visitIfStatement(self, ctx: LPMSParser.IfStatementContext):
         condition = self.visit(ctx.logic_expr())
@@ -54,17 +53,16 @@ class CustomASTVisitor(LPMSVisitor):
         else_body = self.visit(ctx.block()) if ctx.ELSE_CONDICIONAL() else None
 
         return (
-            "IfElse",
+            "If:",
             condition,
             if_body,
-            ("Else", else_body) if else_body else None,
+            ("Else:", else_body) if else_body else None,
         )
 
     def visitWhileStatement(self, ctx: LPMSParser.WhileStatementContext):
         condition = self.visit(ctx.logic_expr())
         block =  self.visit(ctx.blockWhile())
-        print(block)
-        return ("While", condition, block)
+        return ("While:", condition, block)
     
     def visitBlockWhile(self, ctx: LPMSParser.BlockWhileContext):
         statements = []
@@ -79,7 +77,7 @@ class CustomASTVisitor(LPMSVisitor):
 
     def visitInput(self, ctx: LPMSParser.InputContext):
         variables = [var.getText() for var in ctx.varList().ID()]
-        return ("Input", variables)
+        return ("Input:", variables)
 
     def visitOutput(self, ctx: LPMSParser.OutputContext):
         values = []
@@ -90,7 +88,7 @@ class CustomASTVisitor(LPMSVisitor):
         for expression in ctx.valueList().expression():
             values.append(self.visit(expression))
 
-        return ("Print", values)
+        return ("Print:", values)
 
     def visitExpression(self, ctx: LPMSParser.ExpressionContext):
         if ctx.ID():
