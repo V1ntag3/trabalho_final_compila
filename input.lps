@@ -2,8 +2,11 @@ Program Maior_Menor {
    int a, b;
    a = 50;
    while (a > 0){
-      print("Valor de a:",a, ".");
+      print("Valor de a:", a, " ");
       a = a - 1;
+      if(a == 10){
+         print("igual a 10");
+      }
      
    }
 }
