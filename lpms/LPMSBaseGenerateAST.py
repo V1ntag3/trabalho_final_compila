@@ -99,7 +99,7 @@ class CustomASTVisitor(LPMSVisitor):
             return float(ctx.FLOAT().getText())
 
         elif ctx.E_PARAN() and ctx.D_PARAN():
-            return f"'('{self.visit(ctx.expression())}')'"
+            return f"'('{self.visit(ctx.expression(0))}')'"
         elif (
             (
                 ctx.MUL_DIV_OPERADOR()
