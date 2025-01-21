@@ -1,9 +1,15 @@
 Program Maior_Menor {
    int a, b;
-   a = 30;
-   b = 50;
+   a = 50;
+   b = 30;
    if (a > b){
-      print("Maior: ", a);
+      print("Maior: ", a , " ");
+
+      if(a == 50){
+         print("a é igual a 50");
+      }else{
+         print("a nao é igual a 50");
+      }
    }else{
       if( a < b){
          print("Maior: ", b);

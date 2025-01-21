@@ -78,10 +78,9 @@ class SemanticAnalyzer(LPMSVisitor):
             if len(parts) == 2:
                 var, expression = parts
                 if " " in expression:
-                    operator_index = expression.index(" ")
-                    left_operand = expression[:operator_index]
-                    operator = expression[operator_index + 1 : operator_index + 2]
-                    right_operand = expression[operator_index + 3 :]
+                    
+                    left_operand, operator, right_operand = expression.split(" ")
+                    
                     if not left_operand.isdigit():
                         left_operand = f"[{left_operand}]"
                     if not right_operand.isdigit():
