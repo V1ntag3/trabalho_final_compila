@@ -1,10 +1,10 @@
 section .bss
     num resb 20
     num_len resb 1
-    t4 resq 1
+    t0 resq 1
     b resq 1
     a resq 1
-    t0 resq 1
+    t4 resq 1
 section .data
 msg0: db "Maior: ", 0xA, 0
 msg1: db "Iguais!", 0xA, 0
@@ -14,12 +14,12 @@ section .text
 _start:
     mov qword [a], 0
     mov qword [b], 0
-    mov qword [a], 60
-    mov qword [b], 40
+    mov qword [a], 30
+    mov qword [b], 50
     mov rax, [a]
     cmp rax, [b]
-    jl L1
-    jmp L2
+    jg L1
+    jmp L3
 L1:
     mov rax, 1
     mov rdi, 1
@@ -32,8 +32,8 @@ L1:
 L3:
     mov rax, [a]
     cmp rax, [b]
-    jg L5
-    jmp L6
+    jl L5
+    jmp L7
 L5:
     mov rax, 1
     mov rdi, 1
@@ -56,29 +56,30 @@ L2:
     syscall
 
 print_int:
-    mov rcx, num        ; Ponteiro para o buffer num
-    mov rbx, 10         ; Divisor para obter dígitos
-    xor rdx, rdx        ; Limpa rdx para a divisão
+    mov rcx, num          ; Ponteiro para o buffer num
+    add rcx, 20           ; Posiciona no final do buffer
+    mov rbx, 10           ; Divisor para obter dígitos
+    xor rdx, rdx          ; Limpa rdx
 
 decimal_loop:
-    xor rdx, rdx        ; Limpa rdx
-    div rbx             ; Divide rax por 10: quociente em rax, resto em rdx
-    add dl, '0'         ; Converte o dígito (resto) em ASCII
-    dec rcx             ; Move o ponteiro para trás
-    mov [rcx], dl       ; Armazena o dígito no buffer
-    test rax, rax       ; Verifica se o quociente é 0
-    jnz decimal_loop    ; Continua se ainda há dígitos para processar
+    xor rdx, rdx          ; Limpa rdx novamente
+    div rbx               ; Divide rax por 10
+    add dl, '0'           ; Converte dígito para ASCII
+    dec rcx               ; Move o ponteiro para trás
+    mov [rcx], dl         ; Armazena o dígito no buffer
+    test rax, rax         ; Verifica se o quociente é 0
+    jnz decimal_loop      ; Continua até terminar
 
-    ; Calcula o comprimento do número
-    mov rbx, num
-    sub rbx, rcx        ; Comprimento = endereço inicial - ponteiro atual
-    mov [num_len], bl   ; Armazena o comprimento
+    mov rbx, num          ; Calcula o comprimento
+    add rbx, 20
+    sub rbx, rcx          ; Comprimento = endereço final - ponteiro atual
+    mov [num_len], bl     ; Armazena o comprimento
 
-    ; Imprime o número
-    mov rax, 1          ; syscall: write
-    mov rdi, 1          ; stdout
-    mov rsi, rcx        ; Ponteiro para o início do número
-    mov rdx, rbx        ; Comprimento do número
+    mov rax, 1            ; syscall: write
+    mov rdi, 1            ; stdout
+    mov rsi, rcx          ; Ponteiro para o início do número
+    mov rdx, rbx          ; Comprimento do número
     syscall
 
+    ret                   ; Retorna ao chamador                    
                         

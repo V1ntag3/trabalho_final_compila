@@ -1,10 +1,10 @@
 a = 0
 b = 0
-a = 60
-b = 40
+a = 30
+b = 50
 t0 = a > b
 if t0 goto L1
-goto L2
+goto L3
 L1:
 print "Maior: "
 print a
@@ -12,7 +12,7 @@ goto L2
 L3:
 t4 = a < b
 if t4 goto L5
-goto L6
+goto L7
 L5:
 print "Maior: "
 print b

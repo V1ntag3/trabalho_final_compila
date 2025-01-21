@@ -45,5 +45,7 @@ Quando terminar, desative o ambiente virtual:
 deactivate
 ```
 
-install nasm
-install libiconv
+## OBS:
+
+Os arquivos input.lps e input2.lps tem operações que estão funcionando quando executados, o main.py mostra o código de três endereços e gera o arquivo assembly_code.s que contém o código em assembly. O site que utilizamos para executar o código assembly é o https://www.mycompiler.io/pt/new/asm-x86_64.
+Além disso foi feita a modificação na etapa 2 que está no main_etapa_2.py, já que somente essa semana consegui implementar AST com foi solicitado.

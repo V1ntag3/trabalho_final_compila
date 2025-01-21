@@ -69,13 +69,9 @@ class SemanticAnalyzer(LPMSVisitor):
             if index + 1 < len(self.three_address_code_assembly) - 1:
                 if self.three_address_code_assembly[index + 1].startswith("if"):
                     if len(self.three_address_code_assembly[index + 1].split()) == 4:
-                        label_next = self.three_address_code_assembly[
-                            index + 1
-                        ].split()[3]
+                        label_next = self.three_address_code_assembly[index + 1].split()[3]
                     else:
-                        label_next = self.three_address_code_assembly[
-                            index + 1
-                        ].split()[4]
+                        label_next = self.three_address_code_assembly[index + 1].split()[4]
 
             parts = code.split(" = ")
 
@@ -90,7 +86,7 @@ class SemanticAnalyzer(LPMSVisitor):
                         left_operand = f"[{left_operand}]"
                     if not right_operand.isdigit():
                         right_operand = f"[{right_operand}]"
-
+           
                     if left_operand == "True":
                         left_operand = "1"
                     elif left_operand == "False":
@@ -100,32 +96,50 @@ class SemanticAnalyzer(LPMSVisitor):
                         right_operand = "1"
                     elif right_operand == "False":
                         right_operand = "0"
-
+                    
                     # Comparações
                     if operator == ">":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    cmp rax, {right_operand}")
-                        text_code.append(f"    jl {label_next}")
+                        if("if not" in self.three_address_code_assembly[index+1]):
+                            text_code.append(f"    jl {label_next}")
+                        else:
+                            text_code.append(f"    jg {label_next}")
                     elif operator == "<":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    cmp rax, {right_operand}")
-                        text_code.append(f"    jg {label_next}")
+                        if("if not" in self.three_address_code_assembly[index+1]):
+                            text_code.append(f"    jg {label_next}")
+                        else:
+                            text_code.append(f"    jl {label_next}")
                     elif operator == "==":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    cmp rax, {right_operand}")
-                        text_code.append(f"    je {label_next}")
+                        if("if not" in self.three_address_code_assembly[index+1]):
+                            text_code.append(f"    jne {label_next}")
+                        else:
+                            text_code.append(f"    je {label_next}")
                     elif operator == "!=":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    cmp rax, {right_operand}")
-                        text_code.append(f"    jne {label_next}")
+                        if("if not" in self.three_address_code_assembly[index+1]):
+                            text_code.append(f"    je {label_next}")
+                        else:
+                            text_code.append(f"    jne {label_next}")
                     elif operator == ">=":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    cmp rax, {right_operand}")
-                        text_code.append(f"    jle {label_next}")
+                        if("if not" in self.three_address_code_assembly[index+1]):
+                            text_code.append(f"    jle {label_next}")
+                        else:
+                            text_code.append(f"    jge {label_next}")
                     elif operator == "<=":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    cmp rax, {right_operand}")
-                        text_code.append(f"    jge {label_next}")
+                        if("if not" in self.three_address_code_assembly[index+1]):
+                            text_code.append(f"    jge {label_next}")
+                        else:
+                            text_code.append(f"    jle {label_next}")
 
                     # Operações Aritméticas
                     elif operator == "+":
@@ -143,9 +157,8 @@ class SemanticAnalyzer(LPMSVisitor):
                     elif operator == "/":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    mov rbx, {right_operand}")
-                        text_code.append(f"    xor rdx, rdx")
-
                         text_code.append(f"    idiv rbx")
+                        text_code.append(f"    mov rax, rbx")
 
                         text_code.append(f"    mov [{var}], rax")
                     elif operator == "%":
@@ -159,7 +172,7 @@ class SemanticAnalyzer(LPMSVisitor):
                         text_code.append(f"    xor rdx, rdx")
                         text_code.append(f"    div rbx")
                         text_code.append(f"    mov [{var}], rax")
-
+                    
                 else:
                     if var in defined_variables and not expression.isdigit():
                         text_code.append(f"    mov [{var}], rax")
@@ -173,22 +186,11 @@ class SemanticAnalyzer(LPMSVisitor):
                 parts = code.split(" ")
                 label = parts[3]
                 if len(parts) == 4 or len(parts) == 5:
-                    if parts[1] == "True":
+                    if parts[1] == 'True':
                         text_code.append(f"    jmp {parts[-1]}")
-
-            elif code.startswith("input"):
-                variable = code.split()[1]
-
-                text_code.append(f"    mov rax, 0")
-                text_code.append(f"    mov rdi, 0")
-                text_code.append(f"    lea rsi, [{variable}]")
-                text_code.append(f"    mov rdx, 20")
-                text_code.append(f"    syscall")
-
-                text_code.append(f"    xor rax, rax")
-                text_code.append(f"    mov rbx, 10")
-                text_code.append(f"    call input_wait")
-
+                    
+                 
+                    
             elif code.startswith("print"):
                 value_list = code[6:].strip()
                 if value_list.startswith('"') and value_list.endswith('"'):  #
@@ -211,31 +213,32 @@ class SemanticAnalyzer(LPMSVisitor):
         text_code.append(
             """
 print_int:
-    mov rcx, num        ; Ponteiro para o buffer num
-    mov rbx, 10         ; Divisor para obter dígitos
-    xor rdx, rdx        ; Limpa rdx para a divisão
+    mov rcx, num          ; Ponteiro para o buffer num
+    add rcx, 20           ; Posiciona no final do buffer
+    mov rbx, 10           ; Divisor para obter dígitos
+    xor rdx, rdx          ; Limpa rdx
 
 decimal_loop:
-    xor rdx, rdx        ; Limpa rdx
-    div rbx             ; Divide rax por 10: quociente em rax, resto em rdx
-    add dl, '0'         ; Converte o dígito (resto) em ASCII
-    dec rcx             ; Move o ponteiro para trás
-    mov [rcx], dl       ; Armazena o dígito no buffer
-    test rax, rax       ; Verifica se o quociente é 0
-    jnz decimal_loop    ; Continua se ainda há dígitos para processar
+    xor rdx, rdx          ; Limpa rdx novamente
+    div rbx               ; Divide rax por 10
+    add dl, '0'           ; Converte dígito para ASCII
+    dec rcx               ; Move o ponteiro para trás
+    mov [rcx], dl         ; Armazena o dígito no buffer
+    test rax, rax         ; Verifica se o quociente é 0
+    jnz decimal_loop      ; Continua até terminar
 
-    ; Calcula o comprimento do número
-    mov rbx, num
-    sub rbx, rcx        ; Comprimento = endereço inicial - ponteiro atual
-    mov [num_len], bl   ; Armazena o comprimento
+    mov rbx, num          ; Calcula o comprimento
+    add rbx, 20
+    sub rbx, rcx          ; Comprimento = endereço final - ponteiro atual
+    mov [num_len], bl     ; Armazena o comprimento
 
-    ; Imprime o número
-    mov rax, 1          ; syscall: write
-    mov rdi, 1          ; stdout
-    mov rsi, rcx        ; Ponteiro para o início do número
-    mov rdx, rbx        ; Comprimento do número
+    mov rax, 1            ; syscall: write
+    mov rdi, 1            ; stdout
+    mov rsi, rcx          ; Ponteiro para o início do número
+    mov rdx, rbx          ; Comprimento do número
     syscall
 
+    ret                   ; Retorna ao chamador                    
                         """
         )
         return "\n".join(bss_code + text_code)
@@ -679,32 +682,34 @@ decimal_loop:
         label_end = f"L{self.temp_counter}"
         self.temp_counter += 1
 
-        # Verificação de tipo lógico
         if type != "bool":
             self.errors.append(
                 f"Erro semântico na linha {ctx.start.line} - Condição do 'if' deve ser do tipo 'bool', mas é '{type}'."
             )
         
-        # Geração de código para o teste lógico
         self.add_three_address_code(f"if {value} goto {label_true}")
-        self.add_three_address_code(f"goto {label_end}")  # Se falso, vai direto para o fim
-        self.add_three_address_code(f"{label_true}:")  # Se verdadeiro, executa o bloco do 'if'
-
-        # Bloco do 'if'
-        self.visit(ctx.block(0))
-
+        label_else = ""
+        
         if ctx.ELSE_CONDICIONAL():
             label_else = f"L{self.temp_counter}"
             self.temp_counter += 1
+            self.add_three_address_code(f"goto {label_else}")  
+        else:   
+            self.add_three_address_code(f"goto {label_end}") 
+        
+        
+        self.add_three_address_code(f"{label_true}:")  
+        
+        self.visit(ctx.block(0))
 
-            # Geração de código para pular o 'else' após o 'if'
+        if ctx.ELSE_CONDICIONAL():
+
             self.add_three_address_code(f"goto {label_end}")
             self.add_three_address_code(f"{label_else}:")
 
-            # Bloco do 'else'
             self.visit(ctx.block(1))
 
-        self.add_three_address_code(f"{label_end}:")  # Rótulo final
+        self.add_three_address_code(f"{label_end}:")  
 
     def has_errors(self):
         return len(self.errors) > 0
