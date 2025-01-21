@@ -1,6 +1,23 @@
-x = 0
-y = 0
-x = 40
-t0 = 40 / 2
-x = t0
-print x
+a = 0
+b = 0
+a = 60
+b = 40
+t0 = a > b
+if t0 goto L1
+goto L2
+L1:
+print "Maior: "
+print a
+goto L2
+L3:
+t4 = a < b
+if t4 goto L5
+goto L6
+L5:
+print "Maior: "
+print b
+goto L6
+L7:
+print "Iguais!"
+L6:
+L2:

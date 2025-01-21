@@ -1,6 +1,14 @@
-Program Test10{   
-   int x, y;
-   x = 40;
-   x = 40 / 2 * 10 + 5 - (3 + 2 * 3);
-   print(x);
+Program Maior_Menor {
+   int a, b;
+   a = 60;
+   b = 40;
+   if (a > b){
+      print("Maior: ", a);
+   }else{
+      if( a < b){
+         print("Maior: ", b);
+      }else{
+         print("Iguais!");
+      }
+   }
 }

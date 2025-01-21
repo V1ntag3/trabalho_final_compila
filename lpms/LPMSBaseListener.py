@@ -235,35 +235,6 @@ decimal_loop:
     mov rsi, rcx        ; Ponteiro para o início do número
     mov rdx, rbx        ; Comprimento do número
     syscall
-    ret
-
-string_to_int:
-    ; rsi = endereço da string de entrada
-    xor rax, rax       ; Limpa rax (acumulador do número)
-    xor rcx, rcx       ; Limpa rcx (contador)
-string_to_int_loop:
-    movzx rdx, byte [rsi + rcx]  ; Pega o byte atual da string
-    test rdx, rdx               ; Verifica se é o final da string
-    jz string_to_int_done       ; Se for zero (fim), sai
-    sub rdx, '0'                ; Converte de ASCII para valor numérico
-    imul rax, rax, 10           ; Multiplica o acumulador por 10
-    add rax, rdx                ; Adiciona o dígito ao acumulador
-    inc rcx                     ; Incrementa o contador
-    jmp string_to_int_loop      ; Repete o loop
-string_to_int_done:
-    ret
-    
-input_wait:
-    ; Preparando para ler a entrada
-    mov rax, 0          ; Syscall para leitura (0 - read)
-    mov rdi, 0          ; stdin (entrada padrão)
-    lea rsi, [num]      ; Endereço de armazenamento da entrada
-    mov rdx, 20         ; Máximo de 20 bytes
-    syscall             ; Executa a leitura
-
-    ; Agora o código aguarda a entrada, o programa só continua quando pressionar "Enter"
-    ; O código vai parar aqui até a entrada ser fornecida
-    ret
 
                         """
         )
@@ -699,6 +670,7 @@ input_wait:
     def visitIfStatement(self, ctx: LPMSParser.IfStatementContext):
         value = self.evaluateLogicExpression(ctx.logic_expr())
         type = self.inferLogicExpressionType(ctx.logic_expr())
+        
         if value is None:
             return
 
@@ -707,31 +679,32 @@ input_wait:
         label_end = f"L{self.temp_counter}"
         self.temp_counter += 1
 
+        # Verificação de tipo lógico
         if type != "bool":
             self.errors.append(
                 f"Erro semântico na linha {ctx.start.line} - Condição do 'if' deve ser do tipo 'bool', mas é '{type}'."
             )
+        
+        # Geração de código para o teste lógico
         self.add_three_address_code(f"if {value} goto {label_true}")
-        self.add_three_address_code(f"goto {label_end}")
-        self.add_three_address_code(f"{label_true}:")
+        self.add_three_address_code(f"goto {label_end}")  # Se falso, vai direto para o fim
+        self.add_three_address_code(f"{label_true}:")  # Se verdadeiro, executa o bloco do 'if'
 
+        # Bloco do 'if'
         self.visit(ctx.block(0))
 
         if ctx.ELSE_CONDICIONAL():
             label_else = f"L{self.temp_counter}"
             self.temp_counter += 1
 
-            self.add_three_address_code(f"goto {label_else}")
-            self.add_three_address_code(f"{label_end}:")
+            # Geração de código para pular o 'else' após o 'if'
+            self.add_three_address_code(f"goto {label_end}")
+            self.add_three_address_code(f"{label_else}:")
 
+            # Bloco do 'else'
             self.visit(ctx.block(1))
 
-            self.add_three_address_code(f"goto L{self.temp_counter - 1}")
-            self.add_three_address_code(f"{label_else}:")
-        else:
-            self.add_three_address_code(f"goto L{self.temp_counter - 1}")
-
-            self.add_three_address_code(f"{label_end}:")
+        self.add_three_address_code(f"{label_end}:")  # Rótulo final
 
     def has_errors(self):
         return len(self.errors) > 0

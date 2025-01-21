@@ -2,9 +2,8 @@ Program Test5 {
     int count;
     count = 5;
     while (count > 0) {
-        print("Contagem:", count);
+        print(count);
         count = count - 1;
-        break;
     }
     print("Fim da contagem");
 }

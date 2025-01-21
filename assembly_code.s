@@ -1,24 +1,56 @@
 section .bss
     num resb 20
     num_len resb 1
+    t4 resq 1
+    b resq 1
+    a resq 1
     t0 resq 1
-    y resq 1
-    x resq 1
+section .data
+msg0: db "Maior: ", 0xA, 0
+msg1: db "Iguais!", 0xA, 0
 section .text
     global _start
 
 _start:
-    mov qword [x], 0
-    mov qword [y], 0
-    mov qword [x], 40
-    mov rax, 40
-    mov rbx, 2
-    xor rdx, rdx
-    idiv rbx
-    mov [t0], rax
-    mov [x], rax
-    mov rax, [x]
+    mov qword [a], 0
+    mov qword [b], 0
+    mov qword [a], 60
+    mov qword [b], 40
+    mov rax, [a]
+    cmp rax, [b]
+    jl L1
+    jmp L2
+L1:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg0
+    mov rdx, 8
+    syscall
+    mov rax, [a]
     call print_int
+    jmp L2
+L3:
+    mov rax, [a]
+    cmp rax, [b]
+    jg L5
+    jmp L6
+L5:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg0
+    mov rdx, 8
+    syscall
+    mov rax, [b]
+    call print_int
+    jmp L6
+L7:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg1
+    mov rdx, 8
+    syscall
+L6:
+L2:
     mov rax, 60
     xor rdi, rdi
     syscall
@@ -48,34 +80,5 @@ decimal_loop:
     mov rsi, rcx        ; Ponteiro para o início do número
     mov rdx, rbx        ; Comprimento do número
     syscall
-    ret
-
-string_to_int:
-    ; rsi = endereço da string de entrada
-    xor rax, rax       ; Limpa rax (acumulador do número)
-    xor rcx, rcx       ; Limpa rcx (contador)
-string_to_int_loop:
-    movzx rdx, byte [rsi + rcx]  ; Pega o byte atual da string
-    test rdx, rdx               ; Verifica se é o final da string
-    jz string_to_int_done       ; Se for zero (fim), sai
-    sub rdx, '0'                ; Converte de ASCII para valor numérico
-    imul rax, rax, 10           ; Multiplica o acumulador por 10
-    add rax, rdx                ; Adiciona o dígito ao acumulador
-    inc rcx                     ; Incrementa o contador
-    jmp string_to_int_loop      ; Repete o loop
-string_to_int_done:
-    ret
-    
-input_wait:
-    ; Preparando para ler a entrada
-    mov rax, 0          ; Syscall para leitura (0 - read)
-    mov rdi, 0          ; stdin (entrada padrão)
-    lea rsi, [num]      ; Endereço de armazenamento da entrada
-    mov rdx, 20         ; Máximo de 20 bytes
-    syscall             ; Executa a leitura
-
-    ; Agora o código aguarda a entrada, o programa só continua quando pressionar "Enter"
-    ; O código vai parar aqui até a entrada ser fornecida
-    ret
 
                         
