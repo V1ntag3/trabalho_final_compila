@@ -1,6 +1,7 @@
 section .bss
     num resb 20
     num_len resb 1
+    t0 resq 1
     y resq 1
     x resq 1
 section .text
@@ -9,14 +10,13 @@ section .text
 _start:
     mov qword [x], 0
     mov qword [y], 0
-    mov rax, 0
-    mov rdi, 0
-    lea rsi, [x]
-    mov rdx, 20
-    syscall
-    xor rax, rax
-    mov rbx, 10
-    call input_wait
+    mov qword [x], 40
+    mov rax, 40
+    mov rbx, 2
+    xor rdx, rdx
+    idiv rbx
+    mov [t0], rax
+    mov [x], rax
     mov rax, [x]
     call print_int
     mov rax, 60

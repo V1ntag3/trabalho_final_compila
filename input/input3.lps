@@ -1,6 +1,6 @@
 Program Test3 {
     const PI = 3.14;
-    const flag = True;
+    const flag = False;
     print("Valor de PI:", PI, "Flag:", flag);
     PI = 3.15; // Deve gerar erro semântico
 }

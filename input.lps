@@ -1,5 +1,6 @@
 Program Test10 {
    int x, y;
-   input(x);
+   x = 40;
+   x = 40 / 2;
    print(x);
 }

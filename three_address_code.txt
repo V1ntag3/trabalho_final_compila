@@ -1,4 +1,6 @@
 x = 0
 y = 0
-input x
+x = 40
+t0 = 40 / 2
+x = t0
 print x

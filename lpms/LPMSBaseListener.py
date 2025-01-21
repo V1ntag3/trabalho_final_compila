@@ -53,7 +53,6 @@ class SemanticAnalyzer(LPMSVisitor):
 
         for var in variables:
             bss_code.append(f"    {var} resq 1")
-           
 
         if strings:
             text_code.insert(0, "section .data")
@@ -70,12 +69,16 @@ class SemanticAnalyzer(LPMSVisitor):
             if index + 1 < len(self.three_address_code_assembly) - 1:
                 if self.three_address_code_assembly[index + 1].startswith("if"):
                     if len(self.three_address_code_assembly[index + 1].split()) == 4:
-                        label_next = self.three_address_code_assembly[index + 1].split()[3]
+                        label_next = self.three_address_code_assembly[
+                            index + 1
+                        ].split()[3]
                     else:
-                        label_next = self.three_address_code_assembly[index + 1].split()[4]
+                        label_next = self.three_address_code_assembly[
+                            index + 1
+                        ].split()[4]
 
             parts = code.split(" = ")
-            
+
             if len(parts) == 2:
                 var, expression = parts
                 if " " in expression:
@@ -87,7 +90,7 @@ class SemanticAnalyzer(LPMSVisitor):
                         left_operand = f"[{left_operand}]"
                     if not right_operand.isdigit():
                         right_operand = f"[{right_operand}]"
-                        
+
                     if left_operand == "True":
                         left_operand = "1"
                     elif left_operand == "False":
@@ -97,7 +100,7 @@ class SemanticAnalyzer(LPMSVisitor):
                         right_operand = "1"
                     elif right_operand == "False":
                         right_operand = "0"
-                    
+
                     # Comparações
                     if operator == ">":
                         text_code.append(f"    mov rax, {left_operand}")
@@ -140,9 +143,9 @@ class SemanticAnalyzer(LPMSVisitor):
                     elif operator == "/":
                         text_code.append(f"    mov rax, {left_operand}")
                         text_code.append(f"    mov rbx, {right_operand}")
+                        text_code.append(f"    xor rdx, rdx")
 
                         text_code.append(f"    idiv rbx")
-                        text_code.append(f"    mov rax, rbx")
 
                         text_code.append(f"    mov [{var}], rax")
                     elif operator == "%":
@@ -156,7 +159,7 @@ class SemanticAnalyzer(LPMSVisitor):
                         text_code.append(f"    xor rdx, rdx")
                         text_code.append(f"    div rbx")
                         text_code.append(f"    mov [{var}], rax")
-                    
+
                 else:
                     print(code)
                     if var in defined_variables and not expression.isdigit():
@@ -171,26 +174,22 @@ class SemanticAnalyzer(LPMSVisitor):
                 parts = code.split(" ")
                 label = parts[3]
                 if len(parts) == 4 or len(parts) == 5:
-                    if parts[1] == 'True':
+                    if parts[1] == "True":
                         text_code.append(f"    jmp {parts[-1]}")
-                    
+
             elif code.startswith("input"):
-                # Extrai a variável onde o valor será armazenado
                 variable = code.split()[1]
-                
-                # Gerar código de leitura (input)
-                text_code.append(f"    mov rax, 0")  # syscall para leitura
-                text_code.append(f"    mov rdi, 0")  # stdin
-                text_code.append(f"    lea rsi, [{variable}]")  # Endereço da variável
-                text_code.append(f"    mov rdx, 20")  # Tamanho máximo de entrada
-                text_code.append(f"    syscall")  # Chama a syscall para ler a entrada
-                
-                # (Opcional) Limpeza do buffer após a leitura (se necessário)
-                text_code.append(f"    xor rax, rax")  # Limpa rax (se necessário)
-                text_code.append(f"    mov rbx, 10")  # Para conversão de string para número (se necessário)
-                text_code.append(f"    call input_wait")  # Pode ser necessário um processo de conversão, dependendo do uso do valor
-        
-                    
+
+                text_code.append(f"    mov rax, 0")
+                text_code.append(f"    mov rdi, 0")
+                text_code.append(f"    lea rsi, [{variable}]")
+                text_code.append(f"    mov rdx, 20")
+                text_code.append(f"    syscall")
+
+                text_code.append(f"    xor rax, rax")
+                text_code.append(f"    mov rbx, 10")
+                text_code.append(f"    call input_wait")
+
             elif code.startswith("print"):
                 value_list = code[6:].strip()
                 if value_list.startswith('"') and value_list.endswith('"'):  #
@@ -638,9 +637,7 @@ input_wait:
                     self.errors.append(
                         f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Tipo '{var_type}' da variável '{var_name}' não é compatível com o 'input'."
                     )
-                self.only_assembly_add_three_address_code(
-                        f"input {var_name}"
-                    )
+                self.only_assembly_add_three_address_code(f"input {var_name}")
 
     # verificar bloco de print
     def visitOutput(self, ctx: LPMSParser.OutputContext):
@@ -656,19 +653,16 @@ input_wait:
                 elif value_type == LPMSParser.ID:
                     # Aqui retornamos o nome da variável (getText() fornece o nome)
                     variable_name = value.getText()
-                    self.only_assembly_add_three_address_code(
-                        f"print {variable_name}"
-                    )
+                    self.only_assembly_add_three_address_code(f"print {variable_name}")
 
             elif isinstance(value, LPMSParser.ExpressionContext):
                 inferred_value = self.inferExpressionType(value)
-        
+
                 self.only_assembly_add_three_address_code(f"print {value.getText()}")
 
             elif isinstance(value, LPMSParser.LogicExprContext):
                 inferred_value = self.inferLogicExpressionType(value)
                 self.only_assembly_add_three_address_code(f"print {inferred_value}")
-
 
     # verificar bloco while
     def visitWhileStatement(self, ctx: LPMSParser.WhileStatementContext):
@@ -688,10 +682,19 @@ input_wait:
             )
         self.add_three_address_code(f"if not {value} goto {label_end}")
 
-        self.visit(ctx.blockWhile())
+        self.visitBlockWhile(ctx.blockWhile(), label_start, label_end)
 
         self.add_three_address_code(f"goto {label_start}")
         self.add_three_address_code(f"{label_end}:")
+
+    def visitBlockWhile(
+        self, ctx: LPMSParser.BlockWhileContext, label_start, label_end
+    ):
+        for child in ctx.children:
+            if isinstance(child, LPMSParser.StatementContext):
+                self.visit(child)
+            elif child.getText() == "break":
+                self.add_three_address_code(f"goto {label_end}")
 
     # verificar bloco if e else se existir
     def visitIfStatement(self, ctx: LPMSParser.IfStatementContext):
