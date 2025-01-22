@@ -1,15 +1,17 @@
 section .bss
     num resb 20
     num_len resb 1
-    b resq 1
     a resq 1
-    t2 resq 1
-    t3 resq 1
+    t0 resq 1
     t4 resq 1
+    b resq 1
+    t8 resq 1
 section .data
-msg0: db "Valor de a:", 0xA, 0
+msg0: db "Maior: ", 0xA, 0
 msg1: db " ", 0xA, 0
-msg2: db "igual a 10", 0xA, 0
+msg2: db "a é igual a 50", 0xA, 0
+msg3: db "a nao é igual a 50", 0xA, 0
+msg4: db "Iguais!", 0xA, 0
 section .text
     global _start
 
@@ -17,14 +19,16 @@ _start:
     mov qword [a], 0
     mov qword [b], 0
     mov qword [a], 50
-L0:
+    mov qword [b], 30
     mov rax, [a]
-    cmp rax, 0
-    jl L1
+    cmp rax, [b]
+    jg L1
+    jmp L3
+L1:
     mov rax, 1
     mov rdi, 1
     mov rsi, msg0
-    mov rdx, 12
+    mov rdx, 8
     syscall
     mov rax, [a]
     call print_int
@@ -34,22 +38,46 @@ L0:
     mov rdx, 2
     syscall
     mov rax, [a]
-    sub rax, 1
-    mov [t3], rax
-    mov [a], rax
-    mov rax, [a]
-    cmp rax, 10
+    cmp rax, 50
     je L5
-    jmp L6
+    jmp L7
 L5:
     mov rax, 1
     mov rdi, 1
     mov rsi, msg2
-    mov rdx, 11
+    mov rdx, 15
+    syscall
+    jmp L6
+L7:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg3
+    mov rdx, 19
     syscall
 L6:
-    jmp L0
-L1:
+    jmp L2
+L3:
+    mov rax, [a]
+    cmp rax, [b]
+    jl L9
+    jmp L11
+L9:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg0
+    mov rdx, 8
+    syscall
+    mov rax, [b]
+    call print_int
+    jmp L10
+L11:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg4
+    mov rdx, 8
+    syscall
+L10:
+L2:
     mov rax, 60
     xor rdi, rdi
     syscall
