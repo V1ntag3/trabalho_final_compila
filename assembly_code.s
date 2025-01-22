@@ -3,12 +3,12 @@ section .bss
     num_len resb 1
     b resq 1
     a resq 1
-    t4 resq 1
-    t3 resq 1
     t2 resq 1
+    t3 resq 1
+    t4 resq 1
 section .data
 msg0: db "Valor de a:", 0xA, 0
-msg1: db ".", 0xA, 0
+msg1: db " ", 0xA, 0
 msg2: db "igual a 10", 0xA, 0
 section .text
     global _start

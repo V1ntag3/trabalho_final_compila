@@ -40,9 +40,9 @@ def main():
         if analyzer.has_errors():
             print(analyzer.get_errors()[0])
         else:
-            write_to_files(analyzer.three_address_code_assembly, analyzer.generate_assembly_code())
+            write_to_files(analyzer.three_address_code, analyzer.generate_assembly_code())
 
-            for i in analyzer.three_address_code_assembly:
+            for i in analyzer.three_address_code:
                 print(i)
 
 if __name__ == "__main__":

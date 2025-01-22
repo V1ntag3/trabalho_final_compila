@@ -19,9 +19,12 @@ class SemanticAnalyzer(LPMSVisitor):
     def add_three_address_code(self, code):
         self.three_address_code.append(code)
         self.three_address_code_assembly.append(code)
-
+   
     def only_assembly_add_three_address_code(self, code):
-        self.three_address_code_assembly.append(code)
+        self.three_address_code_assembly.append(code) 
+    
+    def only_not_assembly_add_three_address_code(self, code):
+        self.three_address_code.append(code)
 
     def generate_assembly_code(self):
         bss_code = []
@@ -596,6 +599,7 @@ decimal_loop:
     # verificar bloco de input
     def visitInput(self, ctx: LPMSParser.InputContext):
         var_list = ctx.varList()
+        count = 0
         for var in var_list.ID():
             var_name = var.getText()
             if var_name not in self.symbol_table:
@@ -609,12 +613,15 @@ decimal_loop:
                     self.errors.append(
                         f"Erro semântico na linha {var.symbol.line}:{var.symbol.column} - Tipo '{var_type}' da variável '{var_name}' não é compatível com o 'input'."
                     )
+                self.only_not_assembly_add_three_address_code(f"param {var_name}")
+                count = count + 1
                 self.only_assembly_add_three_address_code(f"input {var_name}")
-
+        self.only_not_assembly_add_three_address_code("call input " + str(count))
+        
     # verificar bloco de print
     def visitOutput(self, ctx: LPMSParser.OutputContext):
         value_list = ctx.valueList()
-
+        count = 0
         for value in value_list.children:
             if isinstance(value, TerminalNode):
                 value_type = value.symbol.type
@@ -622,19 +629,30 @@ decimal_loop:
                     self.only_assembly_add_three_address_code(
                         f"print {value.getText()}"
                     )
+                    count = count + 1
+                    self.only_not_assembly_add_three_address_code(f"param {value.getText()}")
+
                 elif value_type == LPMSParser.ID:
                     # Aqui retornamos o nome da variável (getText() fornece o nome)
                     variable_name = value.getText()
                     self.only_assembly_add_three_address_code(f"print {variable_name}")
+                    self.only_not_assembly_add_three_address_code(f"param {value.getText()}")
+                    count = count + 1
 
             elif isinstance(value, LPMSParser.ExpressionContext):
                 inferred_value = self.inferExpressionType(value)
 
                 self.only_assembly_add_three_address_code(f"print {value.getText()}")
-
+                self.only_not_assembly_add_three_address_code(f"param {value.getText()}")
+                count = count + 1
+                
             elif isinstance(value, LPMSParser.LogicExprContext):
                 inferred_value = self.inferLogicExpressionType(value)
                 self.only_assembly_add_three_address_code(f"print {inferred_value}")
+                self.only_not_assembly_add_three_address_code(f"param {inferred_value}")
+                count = count + 1
+                
+        self.only_not_assembly_add_three_address_code("call print " + str(count))
 
     # verificar bloco while
     def visitWhileStatement(self, ctx: LPMSParser.WhileStatementContext):
